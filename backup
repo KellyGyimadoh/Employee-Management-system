@@ -1,0 +1,25 @@
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Process the uploaded image
+    $imageUploadResult = processImage($_FILES['image']);
+
+    if (is_string($imageUploadResult)) {
+        // Error message from processImage()
+        echo $imageUploadResult;
+    } else {
+        // Image uploaded successfully, insert user into the database
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $password = $_POST['password'];
+
+        $user = new User($firstname, $lastname, $email, $phone, $password, $password);
+        $result = $user->addNewUser($firstname, $lastname, $email, $password, $phone, $imageUploadResult);
+
+        if ($result === true) {
+            echo "User added successfully.";
+        } else {
+            echo "Failed to add user.";
+        }
+    }
+}
