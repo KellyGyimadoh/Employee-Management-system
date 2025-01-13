@@ -126,7 +126,11 @@ class RegisterController extends Register
                 $this->image
             );
             if ($result) {
+                if(isset($_SESSION['signupdata'])){
+                    unset($_SESSION['signupdata']);
+                }
                 if (isloggedin() && isset($_SESSION['accounttype']) && $_SESSION['accounttype'] == 'admin') {
+                    
                     return ['success' => true, 'message' => 'user added successfully', 'redirecturl' => '../../manager/home.php'];
                 } else {
 

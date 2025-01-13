@@ -40,6 +40,7 @@ class Register extends Dbconnection
         $stmt=$conn->prepare($sql);
         $stmt->bindParam(":email",$email);
        $stmt->execute();
+       
        $result=$stmt->fetch(PDO::FETCH_ASSOC);
        if($result && $email==$result['email']){
         return true;
