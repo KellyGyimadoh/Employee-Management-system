@@ -1,6 +1,7 @@
 <?php
 $title="Register Account";
 include '../includes/head.php';
+require '../includes/sessions.php'
 ?>
 
 <body class="bg-silver-300">
@@ -8,37 +9,23 @@ include '../includes/head.php';
         <div class="brand">
             <a class="link" href="index.html">AdminCAST</a>
         </div>
-        <form id="register-form" action="javascript:;" method="post">
+        <form id="register-form"  method="post" enctype="multipart/form-data">
             <h2 class="login-title">Sign Up</h2>
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="first_name" placeholder="First Name">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="last_name" placeholder="Last Name">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="email" name="email" placeholder="Email" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <input class="form-control" id="password" type="password" name="password" placeholder="Password">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password">
-            </div>
-            <div class="form-group text-left">
-                <label class="ui-checkbox ui-checkbox-info">
-                    <input type="checkbox" name="agree">
-                    <span class="input-span"></span>I agree the terms and policy</label>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-info btn-block" type="submit">Sign up</button>
-            </div>
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']);?>"/>
+           <?php
+           
+           signUpForm();
+           if(isset($_SESSION['signuperrors'])){
+            foreach($_SESSION['signuperrors'] as $error){
+                echo "<div class='text-danger'>
+                $error
+                </div>";
+            }
+            unset($_SESSION['signuperrors']);
+           }
+           ?>
+            <span class='error' style='text-align:center; color:red; font-size:20px'></span> <br>
+                          
             <div class="social-auth-hr">
                 <span>Or Sign up with</span>
             </div>
@@ -64,6 +51,46 @@ include '../includes/head.php';
      <?php
      include '../includes/scripts.php'
      ?>
+     <script>
+        const signUpForm=document.getElementById("register-form");
+        const logerror=document.querySelector(".error")
+        if(signUpForm){
+
+            signUpForm.addEventListener("submit",async (e)=>{
+                e.preventDefault()
+                
+            const formdata= new FormData(signUpForm);
+            const formobj=Object.fromEntries(formdata.entries());
+            try{
+            const response= await fetch('../api/userauth/process.signup.php',{method:'POST',
+                                                                            headers:{
+                                                                                'Content-Type':'application/json'
+                                                                            },
+                                                                            body:JSON.stringify(formobj)
+                                                                            
+            })
+            if(!response.ok){
+                throw new Error("error fetching data");
+            }
+
+            const data= await response.json();
+            console.log(data)
+            if(data.success){
+                alert(data.message)
+                window.location.href=data.redirecturl;
+            }else{
+                alert(data.message)
+                window.location.href=data.redirecturl;
+                
+                logerror.innerHTML=Object.values(data.errors).join("<br>")
+                
+            }
+        }catch(error){
+            console.error(error)
+        }
+        })
+    }
+     </script>
   </body>
 
 </html>

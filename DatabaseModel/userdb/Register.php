@@ -27,14 +27,14 @@ class Register extends Dbconnection
             }
             
         } catch (PDOException $e) {
-            die('error insering data'.$e->getMessage());
+            die('error inserting data'.$e->getMessage());
         }
    }
 
    protected function checkEmailExist($email){
     try {
         $conn=parent::connect_to_database();
-        $sql="SELECT FROM users WHERE email=:email";
+        $sql="SELECT email FROM users WHERE email= :email";
         $stmt=$conn->prepare($sql);
         $stmt->bindParam(":email",$email);
         if($stmt->execute()){

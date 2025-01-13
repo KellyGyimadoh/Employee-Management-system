@@ -1,19 +1,21 @@
 <?php
-function regenerate_session_id(){
-    if(!isset($_SESSION['last_regeneration'])){
+function regenerate_session_id()
+{
+    if (!isset($_SESSION['last_regeneration'])) {
         session_regenerate_id(true);
-        $_SESSION['last_regeneration']=time();
-    }else{
-        $interval= 60*30;
-        if(time()-$_SESSION['last_regeneration']>=$interval){
+        $_SESSION['last_regeneration'] = time();
+    } else {
+        $interval = 60 * 30;
+        if (time() - $_SESSION['last_regeneration'] >= $interval) {
             session_regenerate_id(true);
-            $_SESSION['last_regeneration']=time();
+            $_SESSION['last_regeneration'] = time();
         }
     }
 }
 
 
-function regenerate_session_id_loggedin(){
+function regenerate_session_id_loggedin()
+{
     session_regenerate_id(true); // Regenerate session ID to create a new session
     $userid = $_SESSION['userid']; // Retrieve the user ID from session
     $newsessionid = session_create_id(); // Create a new session ID
@@ -41,17 +43,19 @@ function checkAccount($accounttype)
     }
 }
 
-function isloggedin(){
-    if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']==true){
+function isloggedin()
+{
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
-function hashPassword($password){
-    $options=['cost'=>12];
-$password=password_hash($password,PASSWORD_DEFAULT,$options );
-return $password;
+function hashPassword($password)
+{
+    $options = ['cost' => 12];
+    $password = password_hash($password, PASSWORD_DEFAULT, $options);
+    return $password;
 }
 
 function processImage($file)
@@ -88,10 +92,87 @@ function processImage($file)
     return $target_file; // Return the file path on success
 }
 
-function isloggedOut(){
-    $_SESSION['logged_out']=true;
+function isloggedOut()
+{
+    $_SESSION['logged_out'] = true;
     session_destroy();
 
     header('location:../auth/login.php?logout=true');
     exit;
+}
+
+function signUpForm()
+{
+    if (isset($_SESSION['signupdata']['firstname'])) {
+        echo "  <div class='row'>
+        <div class='col-6'>
+            <div class='form-group'>
+                <input class='form-control' type='text' name='firstname' placeholder='First Name' value='" . $_SESSION['signupdata']['firstname'] . "'>
+            </div>
+        </div>";
+    } else {
+        echo "  <div class='row'>
+        <div class='col-6'>
+            <div class='form-group'>
+                <input class='form-control' type='text' name='firstname' placeholder='First Name' >
+            </div>
+        </div>";
+    }
+    if (isset($_SESSION['signupdata']['lastname'])) {
+        echo " <div class='col-6'>
+        <div class='form-group'>
+            <input class='form-control' type='text' name='lastname' placeholder='Last Name' value='" . $_SESSION['signupdata']['lastname'] . "'>
+        </div>
+    </div>
+</div>";
+    } else {
+        echo " <div class='col-6'>
+        <div class='form-group'>
+            <input class='form-control' type='text' name='lastname' placeholder='Last Name'>
+        </div>
+    </div>
+</div>";
+    }
+    if (isset($_SESSION['signupdata']['email']) && !isset($_SESSION['signuperrors']['invalidemail']) && !isset($_SESSION['signuperrors']['emailexist'])) {
+        echo "
+<div class='form-group'>
+    <input class='form-control' type='email' name='email' placeholder='Email' autocomplete='off' value='" . $_SESSION['signupdata']['email'] . "'>
+</div>
+";
+    } 
+    else {
+        echo "
+        <div class='form-group'>
+            <input class='form-control' type='email' name='email' placeholder='Email' autocomplete='off' >
+        </div>
+        ";
+    }
+    if (isset($_SESSION['signupdata']['phone']) && !isset($_SESSION['signuperrors']['invalidphone']) && !isset($_SESSION['signuperrors']['lowphone'])) {
+        echo "
+<div class='form-group'>
+    <input class='form-control' type='number' name='phone' placeholder='Phone' value='" . $_SESSION['signupdata']['phone'] . "'>
+</div>
+";
+    } else {
+        echo "
+    <div class='form-group'>
+        <input class='form-control' type='number' name='phone' placeholder='Phone'>
+    </div>
+    ";
+    }
+
+    echo "
+<div class='form-group'>
+    <input class='form-control' id='password' type='password' name='password' placeholder='Password'>
+</div>
+<div class='form-group'>
+    <input class='form-control' type='password' name='password_confirmation' placeholder='Confirm Password'>
+</div>
+<div class='form-group'>
+    <label for='image'>Profile Image</label>
+    <input class='form-control' type='file' name='image' placeholder='Profile image'/>
+</div>
+<div class='form-group'>
+    <button class='btn btn-info btn-block' type='submit'>Sign up</button>
+</div>";
 }
