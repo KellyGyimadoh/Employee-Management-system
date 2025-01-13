@@ -58,8 +58,13 @@ function hashPassword($password)
     return $password;
 }
 
+//for $_files processing
 function processImage($file)
 {
+    if (!isset($file['name']) || $file['error'] !== UPLOAD_ERR_OK) {
+        return "No valid image uploaded.";
+    }
+
     $filename = $file['name'];
     $filesize = $file['size'];
     $temp_name = $file['tmp_name'];
@@ -82,7 +87,11 @@ function processImage($file)
     }
 
     // Move the uploaded file to the target directory
-    $target_dir = "images/";
+    $target_dir = __DIR__ . "/images/"; // Ensure target directory exists
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true); // Create directory if it doesn't exist
+    }
+
     $target_file = $target_dir . uniqid() . '.' . $extension; // Generate a unique name
 
     if (!move_uploaded_file($temp_name, $target_file)) {
@@ -91,6 +100,42 @@ function processImage($file)
 
     return $target_file; // Return the file path on success
 }
+//for json image processing
+function processImageBase($base64Image) {
+    if (strpos($base64Image, 'data:image') === 0) {
+        // Extract base64 content
+        $parts = explode(',', $base64Image);
+        $imageData = base64_decode(end($parts));
+
+        // Validate the file type
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_buffer($finfo, $imageData);
+        finfo_close($finfo);
+
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!in_array($mimeType, $allowedMimeTypes)) {
+            return "Invalid file type. Only JPEG, PNG, and JPG are allowed.";
+        }
+
+        // Generate a unique filename and save the image
+        $extension = explode('/', $mimeType)[1];
+        $rootDir = dirname(__DIR__); // Move up one directory to the project root
+        $targetDir = $rootDir . "/images/";
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0777, true); // Create directory if it doesn't exist
+        }
+        $targetFile = $targetDir . uniqid() . '.' . $extension;
+
+        if (file_put_contents($targetFile, $imageData)) {
+            return $targetFile;
+        } else {
+            return "Failed to save the image.";
+        }
+    } else {
+        return "Invalid image data.";
+    }
+}
+
 
 function isloggedOut()
 {

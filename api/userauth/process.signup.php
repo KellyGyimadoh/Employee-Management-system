@@ -19,13 +19,13 @@ try {
     $csrfToken=$input['csrf_token'];
     $imageUploadResult=null;
     if(!hash_equals($_SESSION['csrf_token'],$csrfToken)){
-        if($image){
-
-         $imageUploadResult = processImage($image);
-         if (is_string($imageUploadResult)) {
-            // Error message from processImage()
-            echo json_encode(['message'=>$imageUploadResult]);
-        }
+        
+           if (!empty($image)) {
+            $imageUploadResult = processImageBase($image); // Assume `processImage` handles Base64
+            if (is_string($imageUploadResult) && strpos($imageUploadResult, 'Failed') === 0) {
+                echo json_encode(['message' => $imageUploadResult]);
+                exit;
+            }
         }
          $user= new RegisterController($firstname,$lastname,
             $email,$phone,$password,$password_confirmation,$imageUploadResult);

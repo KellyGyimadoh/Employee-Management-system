@@ -1,6 +1,8 @@
 <?php
+
 class Register extends Dbconnection
 {
+  
     private function hashPassword($password){
         $options=['cost'=>12];
     $password=password_hash($password,PASSWORD_DEFAULT,$options );
@@ -37,11 +39,13 @@ class Register extends Dbconnection
         $sql="SELECT email FROM users WHERE email= :email";
         $stmt=$conn->prepare($sql);
         $stmt->bindParam(":email",$email);
-        if($stmt->execute()){
-            return true;
-        }else{
-            return false;
-        }
+       $stmt->execute();
+       $result=$stmt->fetch(PDO::FETCH_ASSOC);
+       if($result && $email==$result['email']){
+        return true;
+       }else{
+        return false;
+       }
 
     } catch (PDOException $e) {
         die('error occured'.$e->getMessage());

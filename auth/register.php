@@ -5,7 +5,7 @@ require '../includes/sessions.php'
 ?>
 
 <body class="bg-silver-300">
-    <div class="content">
+    <div class="content mb-4">
         <div class="brand">
             <a class="link" href="index.html">AdminCAST</a>
         </div>
@@ -20,11 +20,12 @@ require '../includes/sessions.php'
                 echo "<div class='text-danger'>
                 $error
                 </div>";
+
             }
             unset($_SESSION['signuperrors']);
            }
            ?>
-            <span class='error' style='text-align:center; color:red; font-size:20px'></span> <br>
+            <span class='error fs-6' style='text-align:center; color:red;'></span> <br>
                           
             <div class="social-auth-hr">
                 <span>Or Sign up with</span>
@@ -61,6 +62,13 @@ require '../includes/sessions.php'
                 
             const formdata= new FormData(signUpForm);
             const formobj=Object.fromEntries(formdata.entries());
+             // Handle the image separately
+        const imageFile = formdata.get("image"); // Get the file from FormData
+        if (imageFile && imageFile.size > 0) {
+            // If an image is provided, include its base64 representation
+            const imageBase64 = await convertToBase64(imageFile);
+            formobj.image = imageBase64;
+        }
             try{
             const response= await fetch('../api/userauth/process.signup.php',{method:'POST',
                                                                             headers:{
@@ -79,10 +87,13 @@ require '../includes/sessions.php'
                 alert(data.message)
                 window.location.href=data.redirecturl;
             }else{
-                alert(data.message)
-                window.location.href=data.redirecturl;
+                //alert(data.message)
                 
                 logerror.innerHTML=Object.values(data.errors).join("<br>")
+                // setInterval(() => {
+                //     window.location.href=data.redirecturl;
+                    
+                // }, 4000);
                 
             }
         }catch(error){
@@ -90,6 +101,14 @@ require '../includes/sessions.php'
         }
         })
     }
+    async function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file); // Converts the file to a Data URL (Base64 string)
+    });
+}
      </script>
   </body>
 

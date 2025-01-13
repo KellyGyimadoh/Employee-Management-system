@@ -4,8 +4,8 @@ class RegisterController extends Register
     private $firstname;
     private $lastname;
     private $email;
-    private $password;
-    private $password_confirmation;
+    private $userpassword;
+    private $userpassword_confirmation;
     private $phone;
     private $errors;
     private $id;
@@ -13,15 +13,16 @@ class RegisterController extends Register
     private $image = null;
     private $account_type;
 
-    public function __construct($firstname, $lastname, $email, $phone, $password, $password_confirmation, $image)
+    public function __construct($firstname, $lastname, $email, $phone, $userpassword, $userpassword_confirmation, $image)
     {
+        parent::__construct();
         $this->firstname = $this->sanitizeData($firstname);
         $this->lastname = $this->sanitizeData($lastname);
         $email = $this->sanitizeData($email);
         $this->email = $this->sanitizeEmail($email);
         $this->phone = $this->sanitizeData($phone);
-        $this->password = $this->sanitizeData($password);
-        $this->password_confirmation = $this->sanitizeData($password_confirmation);
+        $this->userpassword = $this->sanitizeData($userpassword);
+        $this->userpassword_confirmation = $this->sanitizeData($userpassword_confirmation);
         $this->image = $this->sanitizeData($image);
     }
     private function sanitizeData($data)
@@ -66,17 +67,18 @@ class RegisterController extends Register
 
     private function password_mismatch()
     {
-        if ($this->password !== $this->password_confirmation) {
+        if ($this->userpassword !== $this->userpassword_confirmation) {
             return true;
         } else {
             return false;
         }
     }
+   
     private function isEmpty()
     {
         if (
             empty($this->firstname) || empty($this->lastname) || empty($this->email) || empty($this->phone)
-            || empty($this->password) || empty($this->password_confirmation)
+            || empty($this->userpassword) || empty($this->userpassword_confirmation)
         ) {
 
             return true;
@@ -105,7 +107,7 @@ class RegisterController extends Register
             $this->errors['emailexist'] = 'Email already exist';
         }
         if ($this->password_mismatch()) {
-            $this->errors['passwordmismatch'] = 'Passwords donot match';
+            $this->errors['passwordmismatch'] = 'passwords donot match';
         }
         if ($this->inValidEmail()) {
             $this->errors['invalidemail'] = 'email is not valid';
@@ -119,7 +121,7 @@ class RegisterController extends Register
                 $this->firstname,
                 $this->lastname,
                 $this->email,
-                $this->password,
+                $this->userpassword,
                 $this->phone,
                 $this->image
             );
@@ -130,19 +132,22 @@ class RegisterController extends Register
 
                     return ['success' => true, 'message' => 'Registration successfully done', 'redirecturl' => '../../auth/login.php'];
                 }
-            } else {
-
-                $signupdata = [
-                    'firstname' => $this->firstname,
-                    'lastname' => $this->lastname,
-                    'email' => $this->email,
-                    'phone' => $this->phone,
-                    'image' => $this->image,
-                ];
-                $_SESSION['signupdata'] = $signupdata;
-                $_SESSION['signuperrors'] = $this->errors;
+            } else{
                 return ['success' => false, 'message' => 'Registration failed', 'errors' => $this->errors, 'redirecturl' => '../../auth/register.php'];
+    
             }
+        }else {
+
+            $signupdata = [
+                'firstname' => $this->firstname,
+                'lastname' => $this->lastname,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'image' => $this->image,
+            ];
+            $_SESSION['signupdata'] = $signupdata;
+            $_SESSION['signuperrors'] = $this->errors;
+            return ['success' => false, 'message' => 'Registration failed', 'errors' => $this->errors, 'redirecturl' => '../../auth/register.php'];
         }
     }
 }
