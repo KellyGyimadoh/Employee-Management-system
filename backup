@@ -23,3 +23,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+function processfile($file){
+    if(!isset($file['name'] || $file['type'])!==UPLOAD_ERR_OK){
+        return 'invalid image'
+    }
+    $filename=$file['name'];
+    $type=$file['type'];
+    $size=$file['size'];
+    $tempname=$file['temp_name']
+    $extension=strtolower(pathinfo($file,PATHINFO_EXTENSION))
+    $arrextextensions=['jpg','png']
+    if(!in_arry($extension,$arrextextensions)){
+        return 'file type not allowed'
+    }
+    if($size> 500*1024){
+        return 'file size too big'
+    }
+    $targetdir=__DIR__./images/
+    if(!file_exists($target_dir)){
+        mkdir($targetdir,0777)
+    }
+    $filetarget=$target_dir.uniqid().$extension
+    if(!move_uploaded_file($temp_name,$filetarget)){
+        return 'failed to upload file';
+    }
+    return $targetfile
+
+}

@@ -1,26 +1,21 @@
 <?php
-class LoginController extends Dbconnection
+class LoginController extends Login
 {
-    private $firstname;
-    private $lastname;
+
     private $email;
-    private $password;
-    private $password_confirmation;
-    private $phone;
+    private $userpassword;
+
     private $errors;
     private $id;
 
     private $account_type;
 
-    public function __construct($firstname, $lastname, $email, $phone, $password, $password_confirmation)
+    public function __construct($email, $userpassword)
     {
-        $this->firstname = $this->sanitizeData($firstname);
-        $this->lastname = $this->sanitizeData($lastname);
+        parent::__construct();
         $email = $this->sanitizeData($email);
         $this->email = $this->sanitizeEmail($email);
-        $this->phone = $this->sanitizeData($phone);
-        $this->password = $this->sanitizeData($password);
-        $this->password_confirmation = $this->sanitizeData($password_confirmation);
+        $this->userpassword = $this->sanitizeData($userpassword);
     }
     private function sanitizeData($data)
     {
@@ -38,32 +33,71 @@ class LoginController extends Dbconnection
 
     private function inValidEmail()
     {
-        if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             return true;
-        }else{
+        } else {
             return false;
         }
-     
     }
-
-    private function inValidPhone($phone)
+    private function isEmpty()
     {
-         if(!filter_var($phone, FILTER_VALIDATE_INT)){
+        if (empty($this->email) || empty($this->userpassword)) {
             return true;
-         }else{
+        } else {
             return false;
-         }
+        }
     }
-    private function digitOnly()
+
+
+    private function checkAccountType($account)
     {
-        $phoneNumber = preg_replace("/[^0-9]/", "", $this->phone);
-        return strlen($phoneNumber) !== 10;
+        $allowedTypes = ['admin', 'staff'];
+        $_SESSION['accounttype'] = in_array($account, $allowedTypes) ? $account : 'guest';
     }
 
-    private function checkAccountType(){
-        
-    }
-    private function emailExist(){
 
+    public function verifyUser()
+{
+    if ($this->inValidEmail()) {
+        $this->errors['invalid email'] = 'Please enter a valid email';
     }
+    if ($this->isEmpty()) {
+        $this->errors['emptyfields'] = 'Please fill all fields';
+    }
+
+    if (empty($this->errors)) {
+        $loginResult = $this->userlogin($this->email, $this->userpassword);
+        if ($loginResult['success']) {
+            $user = $loginResult['user'];
+            $_SESSION['userinfo'] = $user;
+            $_SESSION['loggedin'] = true;
+            $_SESSION['userid'] = $user['userid'];
+
+            $this->account_type = $user['account_type'];
+            $this->checkAccountType($this->account_type);
+
+            session_regenerate_id(true); // Prevent session fixation attacks
+
+            return [
+                'success' => true,
+                'message' => "Login successful",
+                'redirecturl' => $this->account_type == 'admin' ? "../../manager/home.php" : "../../user/home.php"
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $loginResult['message'],
+                'redirecturl' => '../../auth/login.php'
+            ];
+        }
+    } else {
+        return [
+            'success' => false,
+            'message' => 'Error occurred',
+            'errors' => $this->errors,
+            'redirecturl' => '../../auth/login.php'
+        ];
+    }
+}
+
 }

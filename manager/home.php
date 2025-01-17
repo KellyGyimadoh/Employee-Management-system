@@ -3,7 +3,7 @@ $title="Manager Dashboard";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
-if(!isset($_SESSION['loggedin']) && !isset($_SESSION['account_type']) && $_SESSION['account_type']!=="admin"){
+if(!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype']!=="admin"){
     header('location:../auth/login.php');
     die();
 }

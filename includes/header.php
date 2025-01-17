@@ -1,8 +1,8 @@
 <header class="header">
             <div class="page-brand">
-                <a class="link" href="index.html">
-                    <span class="brand">Admin
-                        <span class="brand-tip">CAST</span>
+                <a class="link" href="home.php">
+                    <span class="brand">Factory
+                        <span class="brand-tip fs-3">CAST</span>
                     </span>
                     <span class="brand-mini">AC</span>
                 </a>
@@ -140,13 +140,17 @@
                     <li class="dropdown dropdown-user">
                         <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
                             <img src="./assets/img/admin-avatar.png" />
-                            <span></span>Admin<i class="fa fa-angle-down m-l-5"></i></a>
+                            <span></span><?php echo htmlspecialchars($_SESSION['userinfo']['firstname'])?><i class="fa fa-angle-down m-l-5"></i></a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-user"></i>Profile</a>
+                            <a class="dropdown-item" href="../user/profile.php"><i class="fa fa-user"></i>Profile</a>
                             <a class="dropdown-item" href="profile.html"><i class="fa fa-cog"></i>Settings</a>
                             <a class="dropdown-item" href="javascript:;"><i class="fa fa-support"></i>Support</a>
                             <li class="dropdown-divider"></li>
-                            <a class="dropdown-item" href="login.html"><i class="fa fa-power-off"></i>Logout</a>
+                            <form action="../api/userauth/process.logout.php" method="post">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+                                <button type="submit" name="logout" class="dropdown-item" ><i class="fa fa-power-off"></i>Logout</button>
+                            </form>
                         </ul>
                     </li>
                 </ul>

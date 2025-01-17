@@ -18,7 +18,7 @@ try {
     $image=filter_var($input['image'],FILTER_SANITIZE_SPECIAL_CHARS);
     $csrfToken=$input['csrf_token'];
     $imageUploadResult=null;
-    if(!hash_equals($_SESSION['csrf_token'],$csrfToken)){
+    if(!empty($csrfToken)&&hash_equals($_SESSION['csrf_token'],$csrfToken)){
         
            if (!empty($image)) {
             $imageUploadResult = processImageBase($image); // Assume `processImage` handles Base64
@@ -31,7 +31,8 @@ try {
             $email,$phone,$password,$password_confirmation,$imageUploadResult);
         $result= $user->registerUser();
             if($result){
-                $_SESSION['csrf_token']=bin2hex(random_bytes(32));
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                $_SESSION['csrf_token_time'] = time();
                 echo json_encode($result);
             }
         
