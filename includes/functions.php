@@ -43,7 +43,7 @@ function checkAccount($accounttype)
     }
 }
 
-function isloggedin()
+function isloggedin():bool
 {
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
         return true;
@@ -119,8 +119,9 @@ function processImageBase($base64Image) {
 
         // Generate a unique filename and save the image
         $extension = explode('/', $mimeType)[1];
-        $rootDir = dirname(__DIR__); // Move up one directory to the project root
-        $targetDir = $rootDir . "/images/";
+        //$rootDir = dirname(__DIR__); // Move up one directory to the project root
+        //$targetDir = $rootDir . "/images/";
+        $targetDir = "../../images/"; 
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0777, true); // Create directory if it doesn't exist
         }
@@ -139,10 +140,23 @@ function processImageBase($base64Image) {
 
 function isloggedOut()
 {
-    $_SESSION['logged_out'] = true;
-    session_destroy();
+    //$_SESSION['logged_out'] = true;
+    // unset($_SESSION['csrf_token']);
+    // unset($_SESSION['csrf_token_time']);
 
-    header('location:../auth/login.php?logout=true');
+    // $_SESSION = [];
+
+    
+    // //Destroy the session cookie
+    // if (ini_get("session.use_only_cookies")) {
+    //     $params = session_get_cookie_params();
+    //     setcookie(session_name(), '', time() - 42000,
+    //         $params["path"], $params["domain"],
+    //         $params["secure"], $params["httponly"]
+    //     );
+    // }
+    session_destroy();
+ header('location:../../auth/login.php');
     exit;
 }
 
@@ -201,7 +215,7 @@ function signUpForm()
     } else {
         echo "
     <div class='form-group'>
-        <input class='form-control' type='number' name='phone' placeholder='Phone'>
+        <input class='form-control' type='number' name='phone' placeholder='Phone' >
     </div>
     ";
     }
@@ -219,5 +233,171 @@ function signUpForm()
 </div>
 <div class='form-group'>
     <button class='btn btn-info btn-block' type='submit'>Sign up</button>
+</div>";
+}
+
+function userProfileForm(){
+    
+    if(isset($_SESSION['userinfo']['userid'])){
+        echo"  
+          <div class='col-sm-6 form-group'>
+              <input class='form-control' type='hidden' name='userid' value='" . $_SESSION['userinfo']['userid'] . "'>
+          </div>";
+      }else{
+          echo"  <div class='row'>
+          <div class='col-sm-6 form-group'>
+              <input class='form-control' type='hidden' name='userid'>
+          </div>";
+      }
+    if(isset($_SESSION['userinfo']['firstname'])){
+      echo"  <div class='row'>
+        <div class='col-sm-6 form-group'>
+            <label>First Name</label>
+            <input class='form-control' name='firstname' type='text' placeholder='First Name' value='" . $_SESSION['userinfo']['firstname'] . "'>
+        </div>";
+    }else{
+        echo"  <div class='row'>
+        <div class='col-sm-6 form-group'>
+            <label>First Name</label>
+            <input class='form-control'  name='firstname' type='text' placeholder='First Name'>
+        </div>";
+    }
+    if(isset($_SESSION['userinfo']['lastname'])){
+        echo"
+         <div class='col-sm-6 form-group'>
+        <label>Last Name</label>
+        <input class='form-control' type='text' name='lastname' placeholder='Last Name' value='" . $_SESSION['userinfo']['lastname'] . "'>
+    </div>
+</div>
+        ";
+    }else{
+        echo"
+        <div class='col-sm-6 form-group'>
+       <label>Last Name</label>
+       <input class='form-control' type='text' name='lastname' placeholder='Last Name'>
+   </div>
+</div>
+       ";
+    }
+   if(isset($_SESSION['userinfo']['email'])){
+    echo"<div class='form-group'>
+    <label>Email</label>
+    <input class='form-control' name='email' type='email' placeholder='Email address' value='" . $_SESSION['userinfo']['email'] . "'>
+</div>";
+   }else{
+    echo"<div class='form-group'>
+    <label>Email</label>
+    <input class='form-control' name='email' type='email' placeholder='Email address'>
+</div>";
+   }
+   if(isset($_SESSION['userinfo']['phone'])){
+    echo"<div class='form-group'>
+    <label>Phone</label>
+    <input class='form-control' name='phone' type='tel' placeholder='Phone Number' value='" . $_SESSION['userinfo']['phone'] . "'>
+</div>";
+   }else{
+    echo"<div class='form-group'>
+    <label>Email</label>
+    <input class='form-control' name='phone' type='tel' placeholder='Phone Number'>
+</div>";
+   }
+echo"
+
+<div class='form-group'>
+    <button class='btn btn-primary' type='submit'>Submit</button>
+</div>";
+}
+function managerProfileForm(){
+    
+    if(isset($_SESSION['userinfo']['userid'])){
+        echo"  
+          <div class='col-sm-6 form-group'>
+              <input class='form-control' type='hidden' name='userid' value='" . $_SESSION['userinfo']['userid'] . "'>
+          </div>";
+      }else{
+          echo"  <div class='row'>
+          <div class='col-sm-6 form-group'>
+              <input class='form-control' type='hidden' name='userid'>
+          </div>";
+      }
+    if(isset($_SESSION['userinfo']['firstname'])){
+      echo"  <div class='row'>
+        <div class='col-sm-6 form-group'>
+            <label>First Name</label>
+            <input class='form-control' name='firstname' type='text' placeholder='First Name' value='" . $_SESSION['userinfo']['firstname'] . "'>
+        </div>";
+    }else{
+        echo"  <div class='row'>
+        <div class='col-sm-6 form-group'>
+            <label>First Name</label>
+            <input class='form-control'  name='firstname' type='text' placeholder='First Name'>
+        </div>";
+    }
+    if(isset($_SESSION['userinfo']['lastname'])){
+        echo"
+         <div class='col-sm-6 form-group'>
+        <label>Last Name</label>
+        <input class='form-control' type='text' name='lastname' placeholder='Last Name' value='" . $_SESSION['userinfo']['lastname'] . "'>
+    </div>
+</div>
+        ";
+    }else{
+        echo"
+        <div class='col-sm-6 form-group'>
+       <label>Last Name</label>
+       <input class='form-control' type='text' name='lastname' placeholder='Last Name'>
+   </div>
+</div>
+       ";
+    }
+   if(isset($_SESSION['userinfo']['email'])){
+    echo"<div class='form-group'>
+    <label>Email</label>
+    <input class='form-control' name='email' type='email' placeholder='Email address' value='" . $_SESSION['userinfo']['email'] . "'>
+</div>";
+   }else{
+    echo"<div class='form-group'>
+    <label>Email</label>
+    <input class='form-control' name='email' type='email' placeholder='Email address'>
+</div>";
+   }
+   if(isset($_SESSION['userinfo']['phone'])){
+    echo"<div class='form-group'>
+    <label>Phone</label>
+    <input class='form-control' name='phone' type='tel' placeholder='Phone Number' value='" . $_SESSION['userinfo']['phone'] . "'>
+</div>";
+   }else{
+    echo"<div class='form-group'>
+    <label>Phone</label>
+    <input class='form-control' name='phone' type='tel' placeholder='Phone Number'>
+</div>";
+   }
+   if (isset($_SESSION['userinfo']['account_type'])) {
+    $accountType = $_SESSION['userinfo']['account_type'];
+
+    echo "<div class='col'>
+<div class='form-group'><label for='accounttype'><strong>Account Type</strong></label><select name='account_type' >Account Type
+<option value='' " . ($accountType == '' ? 'selected' : '') . ">Select Option</option>
+<option value='admin' " . ($accountType == 'admin' ? 'selected' : '') . ">Admin</option>
+<option value='staff' " . ($accountType == 'staff' ? 'selected' : '') . ">Staff</option>
+
+</select></div>
+</div>
+</div>";
+} else {
+    $accountType = '';
+    echo "<div class='col'>
+<div class='form-group'><label for='accounttype'><strong>Account Type</strong></label><select name='account_type'>Account Type
+<option value=''>Select Option</option>
+    <option value='director'>Director</option>
+    <option value='staff'>Staff</option>
+</select></div>
+</div>
+</div>";
+}
+echo"
+
+<div class='form-group'>
+    <button class='btn btn-primary' type='submit'>Submit</button>
 </div>";
 }

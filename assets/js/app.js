@@ -4,7 +4,7 @@ var APP = function() {
     // PATHS
     // ======================
     //this.ASSETS_PATH = '../../assets/';
-    this.ASSETS_PATH = './assets/';
+    this.ASSETS_PATH = '../../assets/';
     this.SERVER_PATH = this.ASSETS_PATH + 'demo/server/';
 
     // GLOBAL HELPERS
@@ -30,6 +30,7 @@ $(window).on('load', function() {
 		$('.preloader-backdrop').fadeOut(200);
 		$('body').addClass('has-animation');
 	},0);
+    
 });
 
 // Hide sidebar on small screen

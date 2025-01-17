@@ -1,12 +1,14 @@
 <?php
-$title="Manager Dashboard";
-require '../includes/sessions.php';
+include '../includes/sessions.php';
+$title="User Dashboard";
 include '../includes/head.php';
 
-if(!isset($_SESSION['loggedin']) || !isset($_SESSION['account_type']) && $_SESSION['account_type']!=="admin" || $_SESSION['account_type']!=="staff"){
-    header('location:../auth/login.php');
+if (!isloggedin() || !isset($_SESSION['accounttype']) || 
+    !in_array($_SESSION['accounttype'], [ 'staff','admin'])) {
+      header("Location: ../auth/login.php");
     die();
 }
+
 ?>
 
 <body class="fixed-navbar">
@@ -15,7 +17,7 @@ if(!isset($_SESSION['loggedin']) || !isset($_SESSION['account_type']) && $_SESSI
        <?php
        include('../includes/header.php');
        include('../includes/sidebar.php');
-       
+      
        ?>
        <!-- END HEADER-->
         <!-- START SIDEBAR-->
@@ -711,7 +713,9 @@ if(!isset($_SESSION['loggedin']) || !isset($_SESSION['account_type']) && $_SESSI
     <!-- END PAGA BACKDROPS-->
     <!-- CORE PLUGINS-->
     <?php
-    include('../includes/scripts.php')
+    
+     
+    include '../includes/scripts.php'
     ?>
 </body>
 

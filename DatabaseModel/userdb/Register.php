@@ -52,4 +52,89 @@ class Register extends Dbconnection
         die('error occured'.$e->getMessage());
     }
    }
+
+   protected function checkEmailUnique($newEmail, $id) {
+    try {
+        $conn = parent::connect_to_database();
+        // Check if the new email exists in the database but exclude the current user's record
+        $sql = "SELECT COUNT(*) FROM users WHERE email = :email AND id != :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":email", $newEmail);
+        $stmt->bindParam(":id", $id);
+        
+        $stmt->execute();
+        
+        // Fetch the count of matching emails
+        $emailExists = $stmt->fetchColumn();
+        
+        // If count > 0, the email is not unique
+        if ($emailExists > 0) {
+            return false; // Email is already in use by another user
+        }
+        
+        return true; // Email is unique and can be used
+    } catch (PDOException $e) {
+        // Handle exceptions
+        die('Error occurred: ' . $e->getMessage());
+    }
+}
+protected function updateUser($id,$email,$phone,$firstname,$lastname,$account_type=null){
+    try {
+        $conn=parent::connect_to_database();
+        $conn->beginTransaction();
+        $sql="UPDATE users SET firstname=:firstname, lastname=:lastname,email=:email,phone=:phone";
+
+        if($account_type!==null){
+            $sql.=" ,account_type=:account_type ";
+        }
+        $sql.=" WHERE id=:id";
+
+       $stmt=$conn->prepare($sql);
+       $stmt->bindParam(':firstname', $firstname);
+       $stmt->bindParam(':lastname', $lastname);
+       $stmt->bindParam(':email', $email);
+       $stmt->bindParam(':phone', $phone);
+       if($account_type!==null){
+        $stmt->bindParam(":account_type",$account_type);
+       }
+       $stmt->bindParam(':id', $id);
+      
+       $stmt->execute();
+
+       $sql = "SELECT id, firstname, lastname, email, phone,account_type,image FROM users WHERE id = :id";
+       $stmt = $conn->prepare($sql);
+       $stmt->bindParam(':id', $id);
+       $stmt->execute();
+       $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+       if($conn->commit()){
+        return [
+            'success' => true,
+             'user' => [
+                            'userid' => $result['id'],
+                            'firstname' => $result['firstname'],
+                            'lastname' => $result['lastname'],
+                            'email'=>$result['email'],
+                            'account_type' => $result['account_type'],
+                            'image' => $result['image'],
+                            'phone' => $result['phone'],
+                        ],
+        ];
+       }else{
+        return [
+            'success' => false,
+            
+        ];
+       }
+
+      
+       
+        }
+
+    catch (PDOException $e) {
+        $conn->rollBack();
+        die('error updating user '.$e->getMessage());
+    }
+
+}
 }
