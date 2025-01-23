@@ -6,9 +6,9 @@ include '../includes/sessions.php';
 ?>
 
 <body class="bg-silver-300">
-    <div class="alertbox  hidden">
-        <span class="alertmsg"></span>
-    </div>
+   <?php
+   include '../includes/alert.php';
+   ?>
     <div class="content">
         <div class="brand">
             <a class="link" href="login.php">Login</a>
@@ -67,52 +67,25 @@ include '../includes/sessions.php';
     <?php
     require '../includes/scripts.php';
     ?>
-    <script>
+    <script type="module">
+        import processForm from '../assets/js/processForm.js';
+         import alertFunction from '../assets/js/alertFunction.js'
+         import handleFormMessage from '../assets/js/handleFormMessage.js';
         document.addEventListener("DOMContentLoaded", () => {
             const loginform = document.querySelector("#login-form");
             const errorinfo = document.querySelector(".error");
             const errorinfomsg = document.querySelector(".errormsg");
-            const alertbox = document.querySelector(".alertbox");
-            const alertboxmsg = document.querySelector(".alertmsg");
             if (loginform) {
-                loginform.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formdata = new FormData(loginform);
-                    const formobj = Object.fromEntries(formdata.entries())
-                    try {
-                        const response = await fetch('../api/userauth/process.login.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(formobj)
-                        })
-                        if (!response.ok) {
-                            throw new Error('error processing data' + response.status);
-                        }
-                        
-                        const data = await response.json();
-
-
-
-                        if (data.success) {
-
-                            alert(data.message);
-
-                            window.location.href = data.redirecturl;
-                        } else {
-                            errorinfomsg.innerHTML = data.errors ? Object.values(data.errors).join("<br>") : data.message;
-                           
-
-                           
-                        }
-                    } catch (error) {
-                        console.error(error);
-                        errorinfomsg.innerHTML="Unexpected error occured.Refresh page and try again"
-                    }
-
-                })
-            }
+            loginform.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const resultData = await processForm(loginform, '../api/userauth/process.login.php');
+                if (resultData) {
+                    handleFormMessage(resultData);
+                }
+            });
+        }
+           
+           
         })
     </script>
 </body>

@@ -2965,6 +2965,7 @@ a.text-danger:hover, a.text-danger:focus {
     margin-left: 0 !important; } }
 
 .page-sidebar {
+  
   width: 220px;
   min-height: 100%;
   position: absolute;

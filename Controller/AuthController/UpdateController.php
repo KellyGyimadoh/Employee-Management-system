@@ -9,8 +9,8 @@ class UpdateController extends Register
     private $id;
 
     private $account_type=null;
-
-    public function __construct($id,$firstname, $lastname, $email, $phone,$account_type=null)
+    private $status=null;
+    public function __construct($id,$firstname, $lastname, $email, $phone,$account_type=null,$status=null)
     {
         parent::__construct();
         $this->id = $this->sanitizeData($id);
@@ -20,6 +20,7 @@ class UpdateController extends Register
         $this->email = $this->sanitizeEmail($email);
         $this->phone = $this->sanitizeData($phone);
         $this->account_type= !empty($account_type) ? $this->sanitizeData($account_type): null;
+        $this->status= !empty($status) ? $this->sanitizeData($status): null;
     }
     private function sanitizeData($data)
     {
@@ -108,7 +109,8 @@ class UpdateController extends Register
                 $this->phone,
                 $this->firstname,
                 $this->lastname,
-                $this->account_type
+                $this->account_type,
+                $this->status
             );
             if ($result['success']) {
                 if(isset($_SESSION['userinfo'])){
@@ -116,6 +118,7 @@ class UpdateController extends Register
                     $user=$result['user'];
                     $_SESSION['userinfo']=$user;
                 }
+              
                 if(isset($_SESSION['accounttype'])){
                     $_SESSION['accounttype']=$user['account_type'];
                 }

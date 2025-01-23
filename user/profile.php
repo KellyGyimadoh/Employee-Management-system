@@ -26,6 +26,9 @@ if (isset($_SESSION['userinfo'])) {
         ?>
         <!-- END SIDEBAR-->
         <div class="content-wrapper">
+            <?php
+            include '../includes/alert.php'
+            ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
                 <h1 class="page-title">Profile</h1>
@@ -208,7 +211,7 @@ if (isset($_SESSION['userinfo'])) {
                                                 <div class='col-sm-6 form-group'>
                                                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-                                                    <input class='form-control' type='hidden' name='userid' value="<?php echo htmlspecialchars($_SESSION['userinfo']['userid']) ?>">
+                                                    <input class='form-control' type='hidden' name='userid' value="<?php echo htmlspecialchars($_SESSION['userinfo']['id']) ?>">
                                                 </div>
                                                 <div class='col-sm-6 form-group'>
                                                     <label>Old Password</label>
@@ -222,6 +225,9 @@ if (isset($_SESSION['userinfo'])) {
                                                     <button class='btn btn-primary btn-rounded' type='submit'>Change Password</button>
                                                 </div>
                                             </form>
+                                            <div class="flex-box">
+                                                    <span class="errormsg text-danger fs-5"></span>
+                                            </div>
                                             <!-- passwordform -->
                                         </div>
                                     </div>
@@ -296,11 +302,10 @@ if (isset($_SESSION['userinfo'])) {
 
             </div>
             <!-- END PAGE CONTENT-->
-            <footer class="page-footer">
-                <div class="font-13">2018 © <b>AdminCAST</b> - All rights reserved.</div>
-                <a class="px-4" href="http://themeforest.net/item/adminca-responsive-bootstrap-4-3-angular-4-admin-dashboard-template/20912589" target="_blank">BUY PREMIUM</a>
-                <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
-            </footer>
+           <?php
+           
+           include '../includes/footer.php'
+           ?>
         </div>
     </div>
 
@@ -315,53 +320,35 @@ if (isset($_SESSION['userinfo'])) {
     <?php
     include('../includes/scripts.php');
     ?>
-    <script>
+    <script type="module">
+         import fetchAll from '../assets/js/fetchAll.js'
+         import alertFunction from '../assets/js/alertFunction.js'
+         import handleFormMessage from '../assets/js/handleFormMessage.js';
+         import processForm from '../assets/js/processForm.js';
         document.addEventListener("DOMContentLoaded", () => {
             const profileForm = document.querySelector("#profile-form");
             const passwordForm = document.querySelector("#password-form");
-
             if (profileForm) {
-                processForm(profileForm,'../api/userauth/process.updateuser.php')
+                profileForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const resultData = await processForm(profileForm, '../api/userauth/process.updateuser.php');
+                handleFormMessage(resultData);
+            });
             }
-
-            if(passwordForm){
-                processForm(passwordForm,'../api/userauth/process.updatepassword.php')
+            if (passwordForm) {
+                passwordForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const resultData = await processForm(passwordForm, '../api/userauth/process.updatepassword.php');
+                handleFormMessage(resultData);
+            });
             }
 
         })
 
-         function processForm(form,url){
-            form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(form);
-                    const formobj = Object.fromEntries(formData.entries());
-                    try {
 
-
-                        const response = await fetch(url, {
-                            method: "POST",
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(formobj)
-                        })
-                        if (!response.ok) {
-                            throw new Error('error fetching data');
-                            alert("failed try again")
-                        }
-                        const data = await response.json();
-                        if (data.success) {
-                            alert(data.message);
-                            window.location.reload();
-                        } else {
-                            alert(data.errors)
-                        }
-                    } catch (error) {
-                        console.error(error)
-                    }
-                })
+        
        
-        }
+        
         
     </script>
 </body>

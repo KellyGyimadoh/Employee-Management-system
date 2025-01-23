@@ -1,5 +1,45 @@
-.alertbox{
-    position: relative;
-    top: 10px;
-    left: 20px;
+.alertsuccess{
+   background-color: rgb(140, 229, 140);
+   width: auto;
+   justify-self: end;
+   justify-items: auto;
+   border-color: green !important;
+   align-items: flex-start;
+
+  
+}
+
+.hidebox{
+    display: none;
+}
+
+.alertmessage{
+    font-size: 13px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: inline-flex;
+}
+
+.alertdanger{
+    background-color: rgba(248, 29, 29, 0.349);
+    width: auto;
+    
+    justify-self: end;
+    justify-items: auto;
+    border-color:rgb(253, 123, 114) !important;
+    align-items: flex-start;
+ 
+ }
+
+ .profile-social a {
+    font-size: 16px;
+    margin: 0 10px;
+    color: #999;
+}
+
+.profile-social a:hover {
+    color: #485b6f;
+}
+
+.profile-stat-count {
+    font-size: 22px
 }
