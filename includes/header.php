@@ -139,7 +139,7 @@
                     </li>
                     <li class="dropdown dropdown-user">
                         <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
-                            <img src="./assets/img/admin-avatar.png" />
+                            <img src="../assets/img/admin-avatar.png" />
                             <span></span><?php echo htmlspecialchars($_SESSION['userinfo']['firstname'])?><i class="fa fa-angle-down m-l-5"></i></a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="../user/profile.php"><i class="fa fa-user"></i>Profile</a>
@@ -157,3 +157,5 @@
                 <!-- END TOP-RIGHT TOOLBAR-->
             </div>
         </header>
+      
+       

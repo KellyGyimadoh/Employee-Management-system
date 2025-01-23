@@ -78,7 +78,7 @@ class Register extends Dbconnection
         die('Error occurred: ' . $e->getMessage());
     }
 }
-protected function updateUser($id,$email,$phone,$firstname,$lastname,$account_type=null){
+protected function updateUser($id,$email,$phone,$firstname,$lastname,$account_type=null,$status=null){
     try {
         $conn=parent::connect_to_database();
         $conn->beginTransaction();
@@ -86,6 +86,9 @@ protected function updateUser($id,$email,$phone,$firstname,$lastname,$account_ty
 
         if($account_type!==null){
             $sql.=" ,account_type=:account_type ";
+        }
+        if($status!==null){
+            $sql.=" ,status=:status ";
         }
         $sql.=" WHERE id=:id";
 
@@ -97,8 +100,64 @@ protected function updateUser($id,$email,$phone,$firstname,$lastname,$account_ty
        if($account_type!==null){
         $stmt->bindParam(":account_type",$account_type);
        }
+       if($status!==null){
+        $stmt->bindParam(":status",$status);
+       }
        $stmt->bindParam(':id', $id);
       
+       $stmt->execute();
+
+       $sql = "SELECT id, firstname, lastname, email, phone,account_type,image,status FROM users WHERE id = :id";
+       $stmt = $conn->prepare($sql);
+       $stmt->bindParam(':id', $id);
+       $stmt->execute();
+       $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+       if($conn->commit()){
+        return [
+            'success' => true,
+             'user' => [
+                            'id' => $result['id'],
+                            'firstname' => $result['firstname'],
+                            'lastname' => $result['lastname'],
+                            'email'=>$result['email'],
+                            'account_type' => $result['account_type'],
+                            'image' => $result['image'],
+                            'phone' => $result['phone'],
+                            'status' => $result['status'],
+                        ],
+        ];
+       }else{
+        return [
+            'success' => false,
+            
+        ];
+       }
+
+      
+       
+        }
+
+    catch (PDOException $e) {
+        $conn->rollBack();
+        die('error updating user '.$e->getMessage());
+    }
+
+}
+
+protected function updateUserPassword($id,$newpassword){
+    try {
+        $conn=parent::connect_to_database();
+        $conn->beginTransaction();
+
+        $sql="UPDATE users SET password=:password WHERE id=:id";
+
+
+
+       $stmt=$conn->prepare($sql);
+       $hashedpassword=$this->hashPassword($newpassword);
+       $stmt->bindParam(':password', $hashedpassword);
+       $stmt->bindParam(':id', $id); 
        $stmt->execute();
 
        $sql = "SELECT id, firstname, lastname, email, phone,account_type,image FROM users WHERE id = :id";
@@ -133,8 +192,31 @@ protected function updateUser($id,$email,$phone,$firstname,$lastname,$account_ty
 
     catch (PDOException $e) {
         $conn->rollBack();
-        die('error updating user '.$e->getMessage());
+        die('error updating user password '.$e->getMessage());
     }
 
 }
+protected function checkPasswordMatch($id,$oldpassword) {
+    try {
+        $conn = parent::connect_to_database();
+        // Check if the new email exists in the database but exclude the current user's record
+        $sql = "SELECT password FROM users WHERE id=:id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        
+        $stmt->execute();
+        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(password_verify($oldpassword,$result['password'])){
+
+            return true; //password matches
+        }else{
+            return false;
+        }
+    } catch (PDOException $e) {
+        // Handle exceptions
+        die('Error occurred: ' . $e->getMessage());
+    }
+}
+
 }

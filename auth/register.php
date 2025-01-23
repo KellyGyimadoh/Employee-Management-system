@@ -1,11 +1,14 @@
 <?php
 $title="Register Account";
 include '../includes/head.php';
-require '../includes/sessions.php'
+require '../includes/sessions.php';
 ?>
 
 <body class="bg-silver-300">
     <div class="content mb-4">
+        <?php
+        include '../includes/alert.php';
+        ?>
         <div class="brand">
             <a class="link" href="index.html">AdminCAST</a>
         </div>
@@ -52,7 +55,11 @@ require '../includes/sessions.php'
      <?php
      include '../includes/scripts.php'
      ?>
-     <script>
+     <script type="module">
+         import alertFunction from '../assets/js/alertFunction.js'
+        document.addEventListener("DOMContentLoaded",()=>{
+
+       
         const signUpForm=document.getElementById("register-form");
         const logerror=document.querySelector(".error")
         if(signUpForm){
@@ -82,22 +89,26 @@ require '../includes/sessions.php'
             }
 
             const data= await response.json();
-            console.log(data)
+            
             if(data.success){
-                alert(data.message)
-                window.location.href=data.redirecturl;
+                alertFunction(data.message,data.success)
+                setTimeout(() => {
+                    window.location.href=data.redirecturl;
+                    
+                }, 3000);
             }else{
-                //alert(data.message)
+                alertFunction(data.message,data.success)
                 
                 logerror.innerHTML=Object.values(data.errors).join("<br>")
-                // setInterval(() => {
-                //     window.location.href=data.redirecturl;
+                setTimeout(() => {
+                    window.location.href=data.redirecturl;
                     
-                // }, 4000);
+                }, 3000);
                 
             }
         }catch(error){
             console.error(error)
+            alertFunction(error,false)
         }
         })
     }
@@ -109,6 +120,7 @@ require '../includes/sessions.php'
         reader.readAsDataURL(file); // Converts the file to a Data URL (Base64 string)
     });
 }
+        })
      </script>
   </body>
 

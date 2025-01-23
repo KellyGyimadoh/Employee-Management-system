@@ -71,7 +71,7 @@ class LoginController extends Login
             $user = $loginResult['user'];
             $_SESSION['userinfo'] = $user;
             $_SESSION['loggedin'] = true;
-            $_SESSION['userid'] = $user['userid'];
+            $_SESSION['userid'] = $user['id'];
 
             $this->account_type = $user['account_type'];
             $this->checkAccountType($this->account_type);

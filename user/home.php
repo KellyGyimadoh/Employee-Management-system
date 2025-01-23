@@ -4,7 +4,7 @@ $title="User Dashboard";
 include '../includes/head.php';
 
 if (!isloggedin() || !isset($_SESSION['accounttype']) || 
-    !in_array($_SESSION['accounttype'], [ 'staff','admin'])) {
+    !in_array($_SESSION['accounttype'], [ 'staff','admin']) || $_SESSION['userinfo']['status']!==1) {
       header("Location: ../auth/login.php");
     die();
 }

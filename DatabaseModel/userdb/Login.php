@@ -4,7 +4,7 @@ class Login extends Dbconnection{
     protected function userlogin($email,$password){
         try {
             $conn=parent::connect_to_database();
-            $query="SELECT id,firstname,lastname,email,password,phone,account_type,image FROM users WHERE email=:email";
+            $query="SELECT id,firstname,lastname,email,password,phone,account_type,image,status FROM users WHERE email=:email";
             $stmt=$conn->prepare($query);
             $stmt->bindParam(":email",$email);
             $stmt->execute();
@@ -14,13 +14,14 @@ class Login extends Dbconnection{
                     return [
                         'success' => true,
                         'user' => [
-                            'userid' => $result['id'],
+                            'id' => $result['id'],
                             'firstname' => $result['firstname'],
                             'lastname' => $result['lastname'],
                             'email'=>$result['email'],
                             'account_type' => $result['account_type'],
                             'image' => $result['image'],
-                            'phone' => $result['phone']
+                            'phone' => $result['phone'],
+                            'status' => $result['status'],
                         ]
                     ];
                   

@@ -17,6 +17,9 @@ try {
     $accounttype = isset($input['account_type']) 
     ? filter_var($input['account_type'], FILTER_SANITIZE_SPECIAL_CHARS) 
     : null;
+    $status = isset($input['status']) 
+    ? filter_var($input['status'], FILTER_SANITIZE_NUMBER_INT) 
+    : null;
         $csrfToken=$input['csrf_token'];
         if(!isloggedin() || !isset($_SESSION['userid']) && $userid!==$_SESSION['userid']){
             http_response_code(403);
@@ -27,12 +30,14 @@ try {
        
           
          $user= new UpdateController($userid,$firstname,$lastname,
-            $email,$phone,$accounttype);
+            $email,$phone,$accounttype,$status);
         $result= $user->updateUserProfile();
-            if($result){
-                $_SESSION['csrf_token']=bin2hex(random_bytes(32));
-                echo json_encode($result);
-            }
+        if ($result['success'] && $result['success']==true) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            $_SESSION['csrf_token_time'] = time();
+        }
+
+        echo json_encode($result);
         
     }else{
         http_response_code(403);
