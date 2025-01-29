@@ -22,6 +22,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
         <div class="content-wrapper">
             <?php
             include '../includes/alert.php';
+           
             ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
@@ -215,7 +216,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-     <script src="../assets/js/deptworkers.js" type="module"></script>
+    
     <script type="module">
         import fetchAll from '../assets/js/fetchAll.js'
         import alertFunction from '../assets/js/alertFunction.js'

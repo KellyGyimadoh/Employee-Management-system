@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
 //departments
 const renderDeptTable=(departments)=>{
             
-    departmentTable.innerHTML=departments.map((dpt,index)=>
+    departmentTable.innerHTML=departments.map(
+        (dpt,index)=>
             `<tr>
 
             <td>${(currentPage-1) * recordsPerPageforDept+ index}</td>
@@ -45,7 +46,7 @@ const renderDeptTable=(departments)=>{
             <a class="btn btn-primary" href="../api/departments/process.editdepartment.php?id=${dpt.id}">Edit</a>
             </td>
             </tr>`
-    )
+    ).join("")
 }
 const renderdeptPaginator=(totalpages,currentpage)=>{
     paginator.innerHTML="";

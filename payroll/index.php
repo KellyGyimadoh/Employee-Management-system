@@ -20,6 +20,9 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
         ?>
         <!-- END SIDEBAR-->
         <div class="content-wrapper">
+            <?php
+            include '../includes/alert.php';
+            ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
                 <h1 class="page-title">EMPLOYEES PAYROLL</h1>
@@ -50,10 +53,14 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                         <div class="col-md-4">
                             <div class="text-md-right dataTables_filter" id="dataTable_filter">
-                                <form method="GET" id="searchSalary">
-                                    <input type="date" name="search" class="form-control form-control-sm"
+                                <form method="GET" id="searchPayroll">
+                                    <input type="date" name="searchdate" class="form-control form-control-sm"
+                                     aria-controls="dataTable" value="<?php echo isset($_GET['searchdate']) 
+                                     ? htmlspecialchars($_GET['searchdate']) : ''; ?>">
+                                      <input type="text" name="search" class="form-control form-control-sm"
                                      aria-controls="dataTable" placeholder="Search"
-                                      value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                      value="<?php echo isset($_GET['search']) 
+                                      ? htmlspecialchars($_GET['search']) : ''; ?>">
                                     <input type="hidden" name="limit">
                                     <input type="hidden" name="page">
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Search</button>
@@ -68,21 +75,25 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 <tr>
                                     <th>No</th>
                                     <th>Employee Name</th>
-                                    <th>Date</th>
                                     <th>Total Salary</th>
+                                    <th>Due Date</th>
+                                    <th>Payment Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
+                                    <th>Update Payment Status</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                 
-                                <th>No</th>
+                                    <th>No</th>
                                     <th>Employee Name</th>
-                                    <th>Date</th>
                                     <th>Total Salary</th>
+                                    <th>Due Date</th>
+                                    <th>Payment Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
+                                    <th>Update Payment Status</th>
                                 </tr>
                             </tfoot>
                             <tbody id="payrollTableBody">
@@ -121,10 +132,8 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-    <script src="../assets/js/payroll.js"  type="module">
-
-
-    </script>
+    <script src="../assets/js/payroll.js"  type="module"></script>
+   
 </body>
 
 </html>

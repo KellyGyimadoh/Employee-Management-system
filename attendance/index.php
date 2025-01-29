@@ -1,5 +1,5 @@
 <?php
-$title = "Payroll";
+$title = "All Attendance Record";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
@@ -20,20 +20,23 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
         ?>
         <!-- END SIDEBAR-->
         <div class="content-wrapper">
+            <?php
+            include '../includes/alert.php';
+            ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
-                <h1 class="page-title">EMPLOYEES PAYROLL</h1>
+                <h1 class="page-title">EMPLOYEES ATTENDANCE </h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="allworkers.php"><i class="la la-home font-20"></i></a>
                     </li>
-                    <li class="breadcrumb-item">PAYROLL</li>
+                    <li class="breadcrumb-item">ATTENDANCE RECORD</li>
                 </ol>
             </div>
             <div class="page-content fade-in-up">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <div class="ibox-title">Employee Payroll</div>
+                        <div class="ibox-title">Employee Attendance</div>
                     </div>
                     <div class="row m-2 d-flex justify-content-between">
                         <div class="col-md-6 text-nowrap">
@@ -48,12 +51,20 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 </label>
                             </div>
                         </div>
+                        <div class=" row ">
+                                <span class="errormsg text-danger fs-5"></span>
+                            </div>
                         <div class="col-md-4">
                             <div class="text-md-right dataTables_filter" id="dataTable_filter">
-                                <form method="GET" id="searchSalary">
-                                    <input type="date" name="search" class="form-control form-control-sm"
-                                     aria-controls="dataTable" placeholder="Search"
-                                      value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                <form method="GET" id="searchAttendance">
+                                    <input type="date" name="searchdate" class="form-control form-control-sm"
+                                        aria-controls="dataTable" placeholder="Search"
+                                        value="<?php echo isset($_GET['searchdate'])
+                                                    ? htmlspecialchars($_GET['searchdate']) : ''; ?>">
+                                    <input type="text" name="search" class="form-control form-control-sm"
+                                        aria-controls="dataTable" placeholder="Search"
+                                        value="<?php echo isset($_GET['search'])
+                                                    ? htmlspecialchars($_GET['search']) : ''; ?>">
                                     <input type="hidden" name="limit">
                                     <input type="hidden" name="page">
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Search</button>
@@ -68,24 +79,26 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 <tr>
                                     <th>No</th>
                                     <th>Employee Name</th>
+                                    <th>Time Checked In</th>
                                     <th>Date</th>
-                                    <th>Total Salary</th>
                                     <th>Status</th>
                                     <th>Action</th>
+                                    <th>Mark User</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                
-                                <th>No</th>
+
+                                    <th>No</th>
                                     <th>Employee Name</th>
+                                    <th>Time Checked In</th>
                                     <th>Date</th>
-                                    <th>Total Salary</th>
                                     <th>Status</th>
                                     <th>Action</th>
+                                    <th>Mark User</th>
                                 </tr>
                             </tfoot>
-                            <tbody id="payrollTableBody">
+                            <tbody id="attendanceTableBody">
 
 
                             </tbody>
@@ -93,7 +106,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                            <ul class="payrollpagination pagination">
+                            <ul class="attendancepagination pagination">
 
                             </ul>
                         </nav>
@@ -121,7 +134,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-    <script src="../assets/js/payroll.js"  type="module">
+    <script src="../assets/js/attendance.js" type="module">
 
 
     </script>

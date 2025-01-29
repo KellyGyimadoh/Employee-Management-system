@@ -26,6 +26,49 @@ class ViewUser extends Dbconnection{
                 die('error fetching data'.$e->getMessage());
             }
     }
+
+    protected  function usersCountSummary(){
+        try {
+            $conn=parent::connect_to_database();
+            $Staffsql="SELECT COUNT(*) AS staff_total FROM users WHERE account_type='staff'";
+            
+            $Staffstmt=$conn->prepare($Staffsql);
+           
+            $Staffstmt->execute();
+            $Staffresult=$Staffstmt->fetch(PDO::FETCH_ASSOC);
+
+            $adminsql="SELECT COUNT(*) AS admin_total FROM users WHERE account_type ='admin'";
+            
+            $adminstmt=$conn->prepare($adminsql);
+           
+            $adminstmt->execute();
+            $adminresult=$adminstmt->fetch(PDO::FETCH_ASSOC);
+
+            $activesql="SELECT COUNT(*) AS active_total FROM users WHERE status =1";
+            
+            $activestmt=$conn->prepare($activesql);
+           
+            $activestmt->execute();
+            $activeresult=$activestmt->fetch(PDO::FETCH_ASSOC);
+
+            $inactivesql="SELECT COUNT(*) AS inactive_total FROM users WHERE status =2";
+            
+            $inactivestmt=$conn->prepare($inactivesql);
+           
+            $inactivestmt->execute();
+            $inactiveresult=$inactivestmt->fetch(PDO::FETCH_ASSOC);
+
+            return[
+                'staff_total'=>$Staffresult['staff_total'],
+                'admin_total'=>$adminresult['admin_total'],
+                'active_total'=>$activeresult['active_total'],
+                'inactive_total'=>$inactiveresult['inactive_total']
+            ];
+            
+        } catch (PDOException $e) {
+            die('error fetching data for users count'.$e->getMessage());
+        }
+}
     protected function getUserDetails($limit, $offset, $search = '', $accountType = null)
 {
     try {

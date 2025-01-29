@@ -42,4 +42,13 @@ private $search=null;
         }
         return [];
     }
+
+    public function allSalaryCount(){
+        $result= $this->getTotalSalaryCount();
+        if($result){
+           return $result;
+        }
+        return [];
+    }
+    
 }

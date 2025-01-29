@@ -5,16 +5,19 @@ private $limit;
 private $offset;
 private $search=null;
 
+private $deptid=null;
+
 private $account_type=null;
-    public function __construct($limit,$offset,$search=null){
+    public function __construct($limit,$offset,$search=null,$deptid=null){
         parent::__construct();
-        $limit=$this->sanitizeNumber($limit);
+        $limit=!empty($limit)?$this->sanitizeNumber($limit):null;
         $this->limit=$this->sanitizeData($limit);
 
-        $offset=$this->sanitizeNumber($offset);
-        $this->offset=$this->sanitizeData($offset);
+        $offset=!empty($offset)?$this->sanitizeNumber($offset):null;
+        $this->offset=!empty($offset)? $this->sanitizeData($offset) : null;
 
         $this->search= !empty($search) ? $this->sanitizeData($search) : null;
+        $this->deptid= !empty($deptid) ? $this->sanitizeData($deptid) : null;
        
     }
 
@@ -43,4 +46,12 @@ private $account_type=null;
         }
         return [];
     }
+public function getHeadOfDepartments(){
+    return $this->getAllDepartmentHeads($this->deptid);
+}
+
+public function AllDepartments(){
+    return $this->AllDepartmentCountAndDetail();
+}
+   
 }

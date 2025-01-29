@@ -5,12 +5,12 @@
    justify-items: auto;
    border-color: green !important;
    align-items: flex-start;
-
+    height: 30%;
   
 }
 
-.hidebox{
-    display: none;
+.hidden{
+    display: none !important;
 }
 
 .alertmessage{
@@ -30,6 +30,11 @@
  
  }
 
+ label{
+    font-size: 15px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+ }
  .profile-social a {
     font-size: 16px;
     margin: 0 10px;
@@ -42,4 +47,24 @@
 
 .profile-stat-count {
     font-size: 22px
+}
+
+.dptcard{
+    height:fit-content !important;
+    background-color: rgb(223, 243, 175) !important;
+   margin: auto;
+   width: 100% !important;
+
+}
+.attcard{
+    height:fit-content !important;
+    background-color: rgb(197, 241, 199) !important;
+   margin-bottom: 10px !important;
+   width: 100% !important;
+
+
+}
+
+.dptmini{
+    height: max-content !important;
 }

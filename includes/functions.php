@@ -29,18 +29,20 @@ function regenerate_session_id_loggedin()
 
 function checkAccount($accounttype)
 {
-    $account = isset($_SESSION['accounttype']) ? $_SESSION['accounttype'] : "";
+    if(isset($_SESSION['accounttype'])){
+
+        $account =htmlspecialchars($_SESSION['accounttype']) ;
+    }
     //get available account
     $allow = true;
-    if (!empty($accounttype) && isset($accounttype) && $account === $accounttype) {
-        if (in_array($accounttype, $account) && $allow === true) {
+    if (!empty($accounttype)) {
+        if (in_array($account, $accounttype)) {
+            return $allow;
         } else {
-            header("../auth/index.php");
+            return !$allow;
         }
-    } else {
-        header("Location:../auth/index.php");
-        die();
-    }
+    } 
+    
 }
 
 function isloggedin(): bool
@@ -542,7 +544,7 @@ function createDepartmentForm()
         
         ";
     }
-   
+
     if (isset($_SESSION['departmentdetails']['name'])) {
         echo "
      
@@ -577,7 +579,7 @@ function createDepartmentForm()
 
 ";
     }
-    
+
     if (isset($_SESSION['departmentdetails']['phone'])) {
 
         echo "
@@ -600,7 +602,7 @@ function createDepartmentForm()
         $head = $_SESSION['departmentdetails']['head'];
         $firstname = $_SESSION['departmentdetails']['head_firstname'];
         $lastname = $_SESSION['departmentdetails']['head_lastname'];
-       
+
 
         echo "
           <div class='col-6 mb-2 p-2'>
@@ -654,27 +656,27 @@ function createDepartmentForm()
 
 ";
     }
-   
 }
 
-function editSalariesForm(){
-    echo"<div class='row mt-3'>";
-    if(isset($_SESSION['salarydetails']['id'])){
-        echo"<input type='hidden' name='id' value='".$_SESSION['salarydetails']['id']."'/>";
+function editSalariesForm()
+{
+    echo "<div class='row mt-3'>";
+    if (isset($_SESSION['salarydetails']['id'])) {
+        echo "<input type='hidden' name='id' value='" . $_SESSION['salarydetails']['id'] . "'/>";
     }
-    if(isset($_SESSION['salarydetails']['user_id'])){
-        $id=$_SESSION['salarydetails']['user_id'];
-        $firstname=$_SESSION['salarydetails']['firstname'];
-        $lastname=$_SESSION['salarydetails']['lastname'];
-        echo" <div class='col-6 mt-2'>
+    if (isset($_SESSION['salarydetails']['user_id'])) {
+        $id = $_SESSION['salarydetails']['user_id'];
+        $firstname = $_SESSION['salarydetails']['firstname'];
+        $lastname = $_SESSION['salarydetails']['lastname'];
+        echo " <div class='col-6 mt-2'>
             <label for='user-select'>Worker Name</label>
             <select name='user_id' id='user-select' class='form-control' required>
             <option value=''>Select Worker</option>
-            <option value='$id' ".(!empty($id) ? 'selected' : '').">$firstname $lastname</option>
+            <option value='$id' " . (!empty($id) ? 'selected' : '') . ">$firstname $lastname</option>
                 </select>
             </div>";
-    }else{
-        echo" <div class='col-6 mt-2'>
+    } else {
+        echo " <div class='col-6 mt-2'>
         <label for='user-select'>Worker Name</label>
         <select name='user_id' id='user-select' class='form-control' required>
         <option value=''>Select Worker</option>
@@ -683,35 +685,35 @@ function editSalariesForm(){
             </select>
         </div>";
     }
-if(isset($_SESSION['salarydetails']['base_salary'])){
-    echo " <div class='col-6 mt-2'>
+    if (isset($_SESSION['salarydetails']['base_salary'])) {
+        echo " <div class='col-6 mt-2'>
             <label class='m-2' for='base_salary'>Base Salary</label>
-        <input type='number' name='base_salary' class='form-control' value='".number_format($_SESSION['salarydetails']['base_salary'],'2','.','')."' 
+        <input type='number' name='base_salary' class='form-control' value='" . number_format($_SESSION['salarydetails']['base_salary'], '2', '.', '') . "' 
         step='0.01' min='0' placeholder='Base Salary' required>
         </div>
 
         ";
-}else{
-    echo " <div class='col-6 mt-2'>
+    } else {
+        echo " <div class='col-6 mt-2'>
     <label class='m-2' for='base_salary'>Base Salary</label>
     <input type='number' name='base_salary' class='form-control' value='0' step='0.01' min='0' placeholder='Base Salary' required>
 </div>
 ";
-}
-echo"</div>
+    }
+    echo "</div>
  <div class='row'>
 ";
-if(isset($_SESSION['salarydetails']['bonus'])){
-    echo "
+    if (isset($_SESSION['salarydetails']['bonus'])) {
+        echo "
      <div class='col-6 mt-2'>
             <label class='m-2' for='name'>Bonus</label>
-            <input type='number' name='bonus' class='form-control' value='".number_format($_SESSION['salarydetails']['bonus'],'2','.','')."' 
+            <input type='number' name='bonus' class='form-control' value='" . number_format($_SESSION['salarydetails']['bonus'], '2', '.', '') . "' 
             step='0.01' min='0' placeholder='Bonus' required>
         </div>
     
     ";
-}else{
-    echo "
+    } else {
+        echo "
     <div class='col-6 mt-2'>
            <label class='m-2' for='name'>Bonus</label>
            <input type='number' name='bonus' class='form-control' value='0' 
@@ -719,90 +721,87 @@ if(isset($_SESSION['salarydetails']['bonus'])){
        </div>
    
    ";
+    }
+    if (isset($_SESSION['salarydetails']['deductions'])) {
 
-}
-if(isset($_SESSION['salarydetails']['deductions'])){
-
-echo " <div class='col-6 mt-2'>
+        echo " <div class='col-6 mt-2'>
         <label class='m-2' for='deductions'>Deductions</label>
-        <input type='number' name='deductions' class='form-control' value='".number_format($_SESSION['salarydetails']['deductions'],'2','.','')."' 
+        <input type='number' name='deductions' class='form-control' value='" . number_format($_SESSION['salarydetails']['deductions'], '2', '.', '') . "' 
          step='0.01' min='0' placeholder='Deductions' required>
         </div>";
-}else{
-    echo " <div class='col-6 mt-2'>
+    } else {
+        echo " <div class='col-6 mt-2'>
         <label class='m-2' for='deductions'>Deductions</label>
         <input type='number' name='deductions' class='form-control' value='0'
          step='0.01' min='0' placeholder='Deductions' required>
         </div>";
-}
-if(isset($_SESSION['salarydetails']['overtime'])){
-    echo " <div class='col-6 mt-2'>
+    }
+    if (isset($_SESSION['salarydetails']['overtime'])) {
+        echo " <div class='col-6 mt-2'>
         <label class='m-2' for='deductions'>Overtime</label>
-        <input type='number' name='overtime' class='form-control' value='".number_format($_SESSION['salarydetails']['overtime'],'2','.','')."'  
+        <input type='number' name='overtime' class='form-control' value='" . number_format($_SESSION['salarydetails']['overtime'], '2', '.', '') . "'  
         step='0.01' min='0' placeholder='Overtime' required>
         </div>";
-}else{
-    echo " <div class='col-6 mt-2'>
+    } else {
+        echo " <div class='col-6 mt-2'>
     <label class='m-2' for='deductions'>Overtime</label>
     <input type='number' name='overtime' class='form-control' value='0'  
     step='0.01' min='0' placeholder='Overtime' required>
     </div>";
-}
-                               
- echo" <div class='col-6 mt-5  w-25 border border-primary d-flex flex-column justify-content-center rounded '>
+    }
+
+    echo " <div class='col-6 mt-5  w-25 border border-primary d-flex flex-column justify-content-center rounded '>
 
 <h3 class='text-center'>Total Salary GHS</h3>
 <div class='col-6 m-auto   d-flex flex-column justify-content-center'>
      <p class='text-center fs-3'>
-     <span class='totalsalary fs-3'>".($_SESSION['salarydetails']['total_salary'] ?? '0.00')."</span></p>
+     <span class='totalsalary fs-3'>" . ($_SESSION['salarydetails']['total_salary'] ?? '0.00') . "</span></p>
     </div>
     </div>
-</div>";                              
-                           
-                               
+</div>";
 }
 
 
-function editPayrollForm(){
-   $result=$_SESSION['payrolldetails'];
-    if(isset($result['id'])){
-        echo"
-        <input type='hidden' name='id'  class='form-control' value='".$result['id']."' required>
+function editPayrollForm()
+{
+    $result = $_SESSION['payrolldetails'];
+    if (isset($result['id'])) {
+        echo "
+        <input type='hidden' name='id'  class='form-control' value='" . $result['id'] . "' required>
         ";
     }
-    if(isset($result['user_id'])){
-        $firstname=$result['firstname'];
-        $lastname=$result['lastname'];
-        echo"
+    if (isset($result['user_id'])) {
+        $firstname = $result['firstname'];
+        $lastname = $result['lastname'];
+        echo "
         <div class='row mt-3'>
 
     <div class='col-6 mt-2'>
         <label for='user-select'>Worker Name</label>
         <h3  class='form-control'>$firstname $lastname</h3>
-        <input type='hidden' value='".$result['user_id']."'>
+        <input type='hidden' value='" . $result['user_id'] . "'>
 
     </div>
         ";
-    }else{
-        echo"
+    } else {
+        echo "
         <div class='row mt-3'>
 
     <div class='col-6 mt-2'>
         <label for='user-select'>Worker Name</label>
 
     </div>";
-
     }
-    if(isset($result['total_salary'])){
+    if (isset($result['total_salary'])) {
         echo "
         <div class='col-6 mt-2'>
         <label class='m-2' for='total_salary'>Total Salary</label>
-         <h3  class='form-control'>".$result['total_salary']."</h3>
+         <h3  class='form-control'>" . $result['total_salary'] . "</h3>
     </div>
 
 </div>
         ";
-    }else{
+    } else {
         echo "
         <div class='col-6 mt-2'>
         <label class='m-2' for='total_salary'>Total Salary</label>
@@ -812,16 +811,16 @@ function editPayrollForm(){
         ";
     }
 
-    if(isset($result['date'])){
-echo "
+    if (isset($result['date'])) {
+        echo "
 <div class='row'>
    
     <div class='col-6 mt-2'>
         <label class='m-2' for='date'>Payment Date</label>
-        <input type='date' name='date' class='form-control' value='".$result['date']."' required>
+        <input type='date' name='date' class='form-control' value='" . $result['date'] . "' required>
     </div>
 ";
-    }else{
+    } else {
 
         echo "
         <div class='row'>
@@ -830,65 +829,260 @@ echo "
                 <label class='m-2' for='date'>Payment Date</label>
                 <input type='date' name='date' class='form-control' required>
             </div>
-        "; 
-    }
-    if(isset($result['due_date'])){
-        echo "
-       
-            <div class='col-6 mt-2'>
-                <label class='m-2' for='due_date'>Due Date</label>
-                <input type='date' name='due_date' class='form-control' value='".$result['due_date']."' required>
-            </div>
         ";
-            }else{
-        
-                echo "
-                
-                   
-                    <div class='col-6 mt-2'>
-                        <label class='m-2' for='due_date'>Due Date</label>
-                        <input type='date' name='due_date' class='form-control' required>
-                    </div>
-                "; 
-            }
-        
-
-    if(isset($result['status'])){
-
-        $status=$result['status'];
-        echo  
+    }
+    if (isset($result['due_date'])) {
+        echo "
     
-"
         <div class='col-6 mt-2'>
+         <label class='m-2' for='due_date'>Due Date</label>
+        <input type='date' name='due_date' class='form-control' value='" . $result['due_date'] . "'>
+        </div>
+    ";
+    } else {
+
+        echo "
+            
+                
+                <div class='col-6 mt-2'>
+                    <label class='m-2' for='due_date'>Due Date</label>
+                    <input type='date' name='due_date' class='form-control'>
+                </div>
+            ";
+    }
+
+
+    if (isset($result['status'])) {
+
+        $status = $result['status'];
+        echo "
+        <div class='col-6 mt-2'>
+    <label for='user-select'>Status</label>
+    <select name='status' id='status' class='form-control' required>
+    <option value='' " . ($status == '' ? 'selected' : '') . ">Select Payment Status</option>
+    <option value='paid' " . ($status == 'paid' ? 'selected' : '') . ">Paid</option>
+    <option value='unpaid' " . ($status == 'unpaid' ? 'selected' : '') . ">Unpaid</option>                           
+    <option value='pending' " . ($status == 'pending' ? 'selected' : '') . ">Pending</option>                           
+</select>
+        </div>
+</div>";
+    } else {
+        echo "
+    <div class='col-6 mt-2'>
+    <label for='user-select'>Status</label>
+    <select name='status' id='status' class='form-control' required>
+    <option value=''>Select Payment Status</option>
+    <option value='paid'>Paid</option>
+    <option value='unpaid'>Unpaid</option>
+    <option value='pending'>Pending</option>
+
+    </select>
+    </div>
+    </div>";
+    }
+}
+
+
+//attendance form
+function editAttendanceForm()
+{
+    $result = $_SESSION['attendancedetails'];
+    if (isset($result['id'])) {
+        echo "
+         <input type='hidden' name='id'  class='form-control' value='" . $result['id'] . "' required>
+         ";
+    }
+    if (isset($result['user_id'])) {
+        $firstname = $result['firstname'];
+        $lastname = $result['lastname'];
+        echo "
+         <div class='row mt-3'>
+ 
+     <div class='col-6 mt-2'>
+         <label for='user-select'>Employee Name</label>
+         <h3  class='form-control'>$firstname $lastname</h3>
+         <input type='hidden' name='user_id' value='" . $result['user_id'] . "'>
+ 
+     </div>
+         ";
+    } else {
+        echo "
+         <div class='row mt-3'>
+ 
+     <div class='col-6 mt-2'>
+         <label for='user-select'>Employee Name</label>
+ 
+     </div>";
+    }
+    if (isset($result['checkin_time'])) {
+        echo "
+         <div class='col-6 mt-2'>
+         <label class='m-2' for='checkin_time'>Time Checked In</label>
+          <input type='time' name='checkin_time' class='form-control' value='" . $result['checkin_time'] . "' required>
+     </div>
+ 
+ </div>
+         ";
+    } else {
+        echo "
+         <div class='col-6 mt-2'>
+         <label class='m-2' for='checkin_time'>Time Checked In</label>
+          <input type='time' name='checkin_time' class='form-control'>
+  
+     </div>
+ 
+ </div>
+         ";
+    }
+
+    if (isset($result['date'])) {
+        echo "
+ <div class='row'>
+    
+     <div class='col-6 mt-2'>
+         <label class='m-2' for='date'>Attendance Date</label>
+         <input type='date' name='date' class='form-control' value='" . $result['date'] . "' required>
+     </div>
+ ";
+    } else {
+
+        echo "
+         <div class='row'>
+            
+             <div class='col-6 mt-2'>
+                 <label class='m-2' for='date'>Attendance Date</label>
+                 <input type='date' name='date' class='form-control' required>
+             </div>
+         ";
+    }
+
+    if (isset($result['status'])) {
+
+        $status = $result['status'];
+        echo " <div class='col-6 mt-2'>
+             <label for='user-select'>Status</label>
+             <select name='status' id='status' class='form-control' required>
+                <option value='' " . ($status == '' ? 'selected' : '') . ">Select Status</option>
+             <option value='1' " . ($status == '1' ? 'selected' : '') . ">Absent</option>
+             <option value='2' " . ($status == '2' ? 'selected' : '') . ">Present</option>                           
+             <option value='3' " . ($status == '3' ? 'selected' : '') . ">Late</option>    
+             </select>
+         </div>
+     
+     </div>";
+    } else {
+        echo
+        " <div class='col-6 mt-2'>
             <label for='user-select'>Status</label>
             <select name='status' id='status' class='form-control' required>
-               <option value='' " . ($status == '' ? 'selected' : '') . ">Select Payment Status</option>
-            <option value='paid' " . ($status == 'paid' ? 'selected' : '') . ">Paid</option>
-            <option value='unpaid' " . ($status == 'unpaid' ? 'selected' : '') . ">Unpaid</option>                           
-            <option value='pending' " . ($status == 'pending' ? 'selected' : '') . ">Pending</option>                           
+                <option value=''>Select Payment Status</option>
+                <option value='1'>Absent</option>
+                <option value='2'>Present</option>
+                <option value='3'>Late</option>
+             </select>
+                 </div>
+             
+             </div>";
+    }
+}
 
-    
+
+function editTaskForm()
+{
+    $result = $_SESSION['taskdetails'];
+
+
+
+    // Hidden task ID
+    if (isset($result['id'])) {
+        echo "<input type='hidden' name='taskid' value='" . htmlspecialchars($result['id']) . "'>";
+    }
+
+    // Task Name
+    $taskName = $result['name'] ?? '';
+    echo "
+    <div class='row mt-3'>
+        <div class='col-6 mt-2'>
+            <label class='m-2' for='name'>Task Name</label>
+            <input type='text' name='name' class='form-control' value='" . htmlspecialchars($taskName) . "' placeholder='Task Name' required>
+        </div>";
+
+    // Description
+    $description = $result['description'] ?? '';
+    echo "
+        <div class='col-6 mt-2'>
+            <label class='m-2' for='description'>Description</label>
+            <textarea name='description' cols='3' rows='4' class='form-control' placeholder='Task Description'>" . htmlspecialchars($description) . "</textarea>
+        </div>
+    </div>";
+
+    // Assign To
+    $assignedTo = $result['assigned_to'] ?? '';
+    $firstname = $result['assigned_to_firstname'] ?? '';
+    $lastname = $result['assigned_to_lastname'] ?? '';
+    echo "
+    <div class='row'>
+        <div class='col-6 mt-2'>
+            <label for='user-select'>Assign To</label>
+            <select name='assigned_to' id='user-select' class='form-control' required>
+                <option value=''>Select Worker</option>
+                " . (!empty($assignedTo) ? "<option value='$assignedTo' selected>$firstname $lastname</option>" : "") . "
+            </select>
+        </div>";
+
+    // Department
+    $departmentId = $result['department_id'] ?? '';
+    $departmentName = $result['department_name'] ?? '';
+    echo "
+        <div class='col-6 mt-2'>
+            <label for='department'>Department</label>
+            <select name='department_id' id='department-select' class='form-control' required>
+                <option value=''>Select Department</option>
+                " . (!empty($departmentId) ? "<option value='$departmentId' selected>$departmentName</option>" : "") . "
             </select>
         </div>
-    
     </div>";
-    }else{
-        echo  
-    
-        "
-                <div class='col-6 mt-2'>
-                    <label for='user-select'>Status</label>
-                    <select name='status' id='status' class='form-control' required>
-                        <option value=''>Select Payment Status</option>
-                        <option value='paid'>Paid</option>
-                        <option value='unpaid'>Unpaid</option>
-                        <option value='pending'>Pending</option>
-            
-                    </select>
-                </div>
-            
-            </div>";
-    }
-  
 
+    // Assigned By
+    $assignedBy = $result['assigned_by'] ?? '';
+    $headFirstname = $result['assigned_by_firstname'] ?? '';
+    $headLastname = $result['assigned_by_lastname'] ?? '';
+    echo "
+    <div class='col-6 mt-2'>
+        <label for='userhead'>Assigned By</label>
+        <select name='assigned_by' id='user-head' class='form-control' required>
+            <option value=''>Select Head</option>
+            " . (!empty($assignedBy) ? "<option value='$assignedBy' selected>$headFirstname $headLastname</option>" : "") . "
+        </select>
+    </div>";
+
+    // Due Date
+    $dueDate = $result['due_date'] ?? '';
+    echo "
+    <div class='col-6 mt-3'>
+        <label for='due_date'>Due Date</label>
+        <input type='date' name='due_date' class='form-control' value='" . htmlspecialchars($dueDate) . "'>
+    </div>";
+
+    // Date Completed
+    $dateCompleted = $result['date_completed'] ?? '';
+    echo "
+    <div class='col-6 mt-3'>
+        <label for='date_completed'>Date Completed</label>
+        <input type='date' name='date_completed' class='form-control' value='" . htmlspecialchars($dateCompleted) . "'>
+    </div>";
+
+    // Status
+    $status = $result['status'] ?? '';
+    echo "
+    <div class='col-6 mt-2'>
+        <label for='status'>Status</label>
+        <select name='status' id='status' class='form-control' required>
+            <option value='' " . ($status == '' ? 'selected' : '') . ">Select Status</option>
+            <option value='1' " . ($status == '1' ? 'selected' : '') . ">Pending</option>
+            <option value='2' " . ($status == '2' ? 'selected' : '') . ">Completed</option>
+            <option value='3' " . ($status == '3' ? 'selected' : '') . ">Late</option>
+        </select>
+    </div>
+    </div>";
 }

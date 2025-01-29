@@ -211,4 +211,101 @@ class Salary extends Dbconnection
             die('error adding data' . $e->getMessage());
         }
     }
+
+
+    protected function updateSalaryDeduction( $userid, $deductions)
+    {
+        try {
+            $deductions = (float)$deductions;
+            
+            $conn = parent::connect_to_database();
+           
+            $sql = "UPDATE  salaries SET deductions=deductions + :deductions ,
+                    total_salary = total_salary - :deductions 
+                    WHERE  user_id=:user_id
+            ";
+            $stmt = $conn->prepare($sql);
+           
+            $stmt->bindParam(":user_id", $userid);
+            $stmt->bindParam(":deductions", $deductions);
+            return $stmt->execute() ? true : false;
+         
+        } catch (PDOException $e) {
+           
+            die('error adding data' . $e->getMessage());
+           
+        }
+    }
+    protected function updateSalaryBonus( $userid, $bonus)
+    {
+        try {
+            $bonus = (float)$bonus;
+            
+            $conn = parent::connect_to_database();
+           
+            $sql = "UPDATE  salaries SET bonus=bonus + :bonus ,
+                    total_salary = total_salary + :bonus 
+                    WHERE  user_id=:user_id
+            ";
+            $stmt = $conn->prepare($sql);
+           
+            $stmt->bindParam(":user_id", $userid);
+            $stmt->bindParam(":bonus", $bonus);
+            return $stmt->execute() ? true : false;
+         
+        } catch (PDOException $e) {
+           
+            die('error adding data' . $e->getMessage());
+           
+        }
+    }
+
+    protected function getTotalSalaryCount()
+    {
+        try {
+            $conn = parent::connect_to_database();
+            $basesql = "SELECT SUM(base_salary) as base_salary_total FROM salaries";
+            $basestmt = $conn->prepare($basesql);
+            $basestmt->execute();
+            $baseResult = $basestmt->fetch(PDO::FETCH_ASSOC);
+
+            $bonussql = "SELECT SUM(bonus) as bonus_total FROM salaries";
+            $bonusStmt = $conn->prepare($bonussql);
+            $bonusStmt->execute();
+            $bonusResult = $bonusStmt->fetch(PDO::FETCH_ASSOC);
+           
+            $overtimesql = "SELECT SUM(overtime) as overtime_total FROM salaries";
+            $overtimeStmt = $conn->prepare($overtimesql);
+            $overtimeStmt->execute();
+            $overtimeResult = $overtimeStmt->fetch(PDO::FETCH_ASSOC);
+           
+            $deductionSql = "SELECT SUM(deductions) as deductions_total FROM salaries";
+            $deductionsStmt = $conn->prepare($deductionSql);
+            $deductionsStmt->execute();
+            $deductionsResult = $deductionsStmt->fetch(PDO::FETCH_ASSOC);
+
+            $totalSalarySql = "SELECT SUM(total_salary) as total_total_salary FROM salaries";
+            $totalSalaryStmt = $conn->prepare($totalSalarySql);
+            $totalSalaryStmt->execute();
+            $totalSalaryResult = $totalSalaryStmt->fetch(PDO::FETCH_ASSOC);
+
+            $totalUsersSql = "SELECT COUNT(user_id) as users FROM salaries";
+            $totalUsersStmt = $conn->prepare($totalUsersSql);
+            $totalUsersStmt->execute();
+            $totalUsersResult = $totalUsersStmt->fetch(PDO::FETCH_ASSOC);
+           
+
+            return [
+                'base_salary_total'=>$baseResult['base_salary_total'],
+                'bonus_total'=>$bonusResult['bonus_total'],
+                'overtime_total'=>$overtimeResult['overtime_total'],
+                'deductions_total'=>$deductionsResult['deductions_total'],
+                'total_salary'=>$totalSalaryResult['total_total_salary'],
+                'total_users'=>$totalUsersResult['users']
+
+            ];
+        } catch (PDOException $e) {
+            die('error occured' . $e->getMessage());
+        }
+    }
 }
