@@ -10,7 +10,7 @@ require '../includes/sessions.php';
         include '../includes/alert.php';
         ?>
         <div class="brand">
-            <a class="link" href="index.html">AdminCAST</a>
+            <a class="link" href="index.html">INFO SPACE TECH <i class="ti-joomla"></i></a>
         </div>
         <form id="register-form"  method="post" enctype="multipart/form-data">
             <h2 class="login-title">Sign Up</h2>
@@ -30,7 +30,7 @@ require '../includes/sessions.php';
            ?>
             <span class='error fs-6' style='text-align:center; color:red;'></span> <br>
                           
-            <div class="social-auth-hr">
+            <!-- <div class="social-auth-hr">
                 <span>Or Sign up with</span>
             </div>
             <div class="text-center social-auth m-b-20">
@@ -39,7 +39,7 @@ require '../includes/sessions.php';
                 <a class="btn btn-social-icon btn-google m-r-5" href="javascript:;"><i class="fa fa-google-plus"></i></a>
                 <a class="btn btn-social-icon btn-linkedin m-r-5" href="javascript:;"><i class="fa fa-linkedin"></i></a>
                 <a class="btn btn-social-icon btn-vk" href="javascript:;"><i class="fa fa-vk"></i></a>
-            </div>
+            </div> -->
             <div class="text-center">Already a member?
                 <a class="color-blue" href="login.php">Login here</a>
             </div>

@@ -46,7 +46,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                
                                <div class="col-6 mt-2">
                                    <label for="user-select">Worker Name</label>
-                                   <select name="user_id" id="user-select" class="form-select" required>
+                                   <select name="user_id" id="user-select" class="form-control" required>
                                        <option value="">Select Worker</option>
 
                                    </select>
@@ -60,7 +60,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                             <div class="row">
                                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
                                 <div class="col-6 mt-2">
-                                    <label class="m-2" for="name">Bonus</label>
+                                    <label class="m-2" for="bonus">Bonus</label>
                                     <input type="number"  name="bonus" class="form-control" value="0" step="0.01" min="0" placeholder="Bonus" required>
                                 </div>
                                 <div class="col-6 mt-2">

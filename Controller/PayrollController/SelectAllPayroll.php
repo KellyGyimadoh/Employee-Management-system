@@ -16,6 +16,9 @@ private $date;
         $this->offset=$this->sanitizeData($offset);
 
         $this->search= !empty($search) ? $this->sanitizeData($search) : null;
+        $this->date= !empty($date) ? $this->sanitizeData($date) : null;
+
+        
        
     }
 
@@ -36,12 +39,25 @@ private $date;
     }
    
     
-
     public function getPayrollProfileDetails(){
         $result= $this->getPayrollDetails($this->limit,$this->offset,$this->search,$this->date);
         if($result){
            return $result;
         }
         return [];
+    }
+
+    //recent  month
+    
+    public function getRecentMonthPayrollDetails(){
+        $result= $this->getPayrollDetailsForRecentMonth($this->limit,$this->offset,$this->search,$this->date);
+        if($result){
+           return $result;
+        }
+        return [];
+    }
+
+    public function getrecentMonthcount(){
+        return $this->getPayrollCountForRecentMonth();
     }
 }

@@ -7,13 +7,16 @@ header('Content-Type: application/json');
 $page= isset($_GET['page']) ? (int)($_GET['page']) : 1;
 $limit=isset($_GET['limit']) ? (int)($_GET['limit']) : 10;
 $search= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : " ";
+$date= isset($_GET['searchdate']) ? htmlspecialchars($_GET['searchdate']) : " ";
+
 
 $offset=($page-1) * $limit;
 
-$allpayroll=new SelectAllPayroll($limit,$offset,$search);
+$allpayroll=new SelectAllPayroll($limit,$offset,$search,$date);
+
+
 $totalpayroll= $allpayroll->getAllPayrollCount();
 $payrolldetails=$allpayroll->getPayrollProfileDetails();
-
 $response=[
     'payrolls'=>$payrolldetails,
     'pagination'=>[

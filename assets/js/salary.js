@@ -47,7 +47,7 @@ const renderSalaryTable=(salaries)=>{
             <a class="btn btn-primary" href="../api/salaries/process.editsalary.php?salaryid=${salary.id}&userid=${salary.user_id}">Edit</a>
             </td>
             </tr>`
-    )
+    ).join("")
 }
 const renderSalaryPaginator=(totalpages,currentpage)=>{
     paginator.innerHTML="";

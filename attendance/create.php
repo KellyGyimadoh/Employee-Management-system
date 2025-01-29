@@ -28,7 +28,7 @@ if (
             ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
-                <h1 class="page-title">MARK ATTENDANCE</h1>
+                <h1 class="page-title">MARK ATTENDANCE <?php echo $_SESSION['userinfo']['firstname']?></h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="allworkers.php"><i class="la la-home font-20"></i></a>

@@ -124,7 +124,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-    <script src="../assets/js/page.js" type="module"></script>
+    <script src="../assets/js/users.js" type="module"></script>
    
 </body>
 

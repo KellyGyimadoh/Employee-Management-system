@@ -6,7 +6,7 @@ private $offset;
 private $search=null;
 
 private $account_type=null;
-    public function __construct($limit,$offset,$search=null,$account_type){
+    public function __construct($limit,$offset,$search=null,$account_type=null){
         parent::__construct();
         $limit=$this->sanitizeNumber($limit);
         $this->limit=$this->sanitizeData($limit);
@@ -48,5 +48,9 @@ private $account_type=null;
             return $result;
         }
         return [];
+    }
+
+    public function AllUsersSummary(){
+        return $this->usersCountSummary()?:$this->usersCountSummary();
     }
 }

@@ -18,8 +18,12 @@ export default function handleFormMessage(data) {
 
             } else {
                 alertFunction(data.message, data.success)
+                if(errorinfomsg){
                 errorinfomsg.innerHTML = data.errors ? Object.values(data.errors).join("<br>") : data.message;
-
+                setTimeout(() => {
+                    errorinfomsg.innerHTML="";
+                }, 3000);
+            }
             }
 
 

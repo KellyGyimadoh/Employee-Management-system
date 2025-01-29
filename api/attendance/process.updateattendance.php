@@ -18,11 +18,23 @@ $currentTime = date('H:i:s');
 
 // Determine if the user is late or on time (8:00:00 is the threshold)
 $status = ($currentTime <= '08:00:00') ? 2 : 3; // 2 = Present, 3 = Late
-if(!isloggedin() || !isset($_SESSION['accounttype']) && $userid!==$_SESSION['userinfo']['id']){
-    http_response_code(403);
-    echo json_encode(['success'=>false,'message'=>'action not allowed']);
+if (
+    !isloggedin() || 
+    (
+        ($_SESSION['accounttype'] !== 'admin') &&
+        (!isset($_SESSION['userinfo']['id']) || (int)$_SESSION['userinfo']['id'] !== (int)$userid)
+    )
+) {
+    $response=['success' => false, 'message' => 'Action not allowed'];
+    echo json_encode($response);
+    //http_response_code(403);
+
+   
     die();
 }
+
+
+
 if(!empty($csrfToken)&&hash_equals($_SESSION['csrf_token'],$csrfToken)){
     $newattendance= new UpdateUserAttendance($userid,$currentDate,
     $status,$currentTime);

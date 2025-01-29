@@ -45,7 +45,7 @@ const renderDeptTable=(workers)=>{
             <a class="btn btn-primary" href=".../../api/userview/process.selectuser.php?userid=${worker.user_id}">Edit</a>
             </td>
             </tr>`
-    )
+    ).join("")
 }
 const renderdeptPaginator=(totalpages,currentpage)=>{
     paginator.innerHTML="";

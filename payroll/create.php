@@ -58,7 +58,8 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
 
                             </div>
                             <div class="row">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                <input type="hidden" name="csrf_token" 
+                                value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
                                 <div class="col-6 mt-2">
                                     <label class="m-2" for="name">Payment Date</label>
                                     <input type="date" name="date" class="form-control">

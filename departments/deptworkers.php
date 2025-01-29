@@ -77,7 +77,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                             </thead>
                             <tfoot>
                                 <tr>
-                                <th>No</th>
+                                    <th>No</th>
                                     <th>Name</th>
                                     <th>Head Of Department</th>
                                     <th>Department Email</th>
