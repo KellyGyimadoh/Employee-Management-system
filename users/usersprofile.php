@@ -1,6 +1,6 @@
 <?php
 include '../includes/sessions.php';
-$title = isset($_SESSION['userinfo']) ? ucfirst($_SESSION['userinfo']['firstname']) . ' ' . 'Profile' : 'User Profile';
+$title = isset($_SESSION['userdetails']) ? htmlspecialchars(ucfirst($_SESSION['userdetails']['firstname']) . ' ' . 'Profile') : 'User Profile';
 include '../includes/head.php';
 
 if (
@@ -13,6 +13,7 @@ if (
 if (isset($_SESSION['userdetails'])) {
     $userinfo = $_SESSION['userdetails'];
 }
+$allowed = checkAccount(['admin']);
 ?>
 
 <body class="fixed-navbar sidebar-mini">
@@ -71,11 +72,13 @@ if (isset($_SESSION['userdetails'])) {
                                     <li class="nav-item">
                                         <a class="nav-link active" href="#tab-1" data-toggle="tab"><i class="ti-bar-chart"></i> Overview</a>
                                     </li>
+                                    <?php if ($allowed): ?>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#tab-2" data-toggle="tab"><i class="ti-settings"></i> Settings</a>
+                                        </li>
+                                    <?php endif ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#tab-2" data-toggle="tab"><i class="ti-settings"></i> Settings</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#tab-3" data-toggle="tab"><i class="ti-announcement"></i> Feeds</a>
+                                        <a class="nav-link" href="#tab-3" data-toggle="tab"><i class="ti-announcement"></i>Assign Task</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -121,54 +124,103 @@ if (isset($_SESSION['userdetails'])) {
 
                                         </div>
                                         <h4 class="text-info m-b-20 m-t-20"><i class="fa fa-shopping-basket"></i> Latest Orders</h4>
-                                  
+
                                     </div>
-                                    <div class="tab-pane fade" id="tab-2">
-                                        <form method="post" id="userprofile-form">
-                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
-                                            <?php
-                                            if (isset($_SESSION['accounttype']) && $_SESSION['accounttype'] == 'admin') {
+                                    <?php
+                                    if (isset($_SESSION['accounttype']) && $_SESSION['accounttype'] == 'admin'):
+
+                                    ?>
+                                        <div class="tab-pane fade" id="tab-2">
+                                            <form method="post" id="userprofile-form">
+                                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                                <?php
                                                 userDetailsProfileForm();
-                                            } else {
-                                                echo "Nothing found here oops";
-                                            }
-                                            ?>
-                                        </form>
-                                        <!-- deleteform -->
-                                        <div>
-                                            <form id="delete-account">
-                                                <div class='col-sm-6 form-group'>
-                                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-                                                    <input class='form-control' type='hidden' name='id' value="<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>">
-                                                </div>
-                                                <div class='form-group item-center'>
-                                                    <button class='btn btn-danger btn-rounded' id="del-btn" type='submit'>Delete User Account</button>
-                                                </div>
+                                                ?>
                                             </form>
-                                        </div>
+                                            <!-- deleteform -->
+                                            <div>
+                                                <form id="delete-account">
+                                                    <div class='col-sm-6 form-group'>
+                                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-                                    </div>
+                                                        <input class='form-control' type='hidden' name='id'
+                                                         value="<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>">
+                                                    </div>
+                                                    <div class='form-group item-center'>
+                                                        <button class='btn btn-danger btn-rounded' id="del-btn" type='submit'>Delete User Account</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    <?php endif ?>
 
                                     <div class="tab-pane fade" id="tab-3">
-                                        <h5 class="text-info m-b-20 m-t-20"><i class="fa fa-bullhorn"></i> Latest Feeds</h5>
-                                        <ul class="media-list media-list-divider m-0">
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-user font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading">New customer <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-info-alt font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading text-warning">Server Warning <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
+                                        <h5 class="text-info m-b-20 m-t-20"><i class="fa fa-bullhorn"></i> Assign New Task</h5>
+                                        <form id="taskform-create">
+                                            <div class="row mt-3">
 
-                                        </ul>
+                                                <input type="hidden" name="csrf_token"
+                                                    value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
+
+                                                <div class="col-6 mt-2">
+                                                    <label class="m-2" for="name">Task Name</label>
+                                                    <input type="text" name="name" class="form-control" placeholder="Task Name" required>
+                                                </div>
+                                                <div class="col-6 mt-2">
+                                                    <label class="m-2" for="description">Description</label>
+                                                    <textarea name="description" cols="3" rows="4" class="form-control"
+                                                        placeholder="Task Description"></textarea>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+
+
+                                                <div class="col-6 mt-2">
+                                                    <label for="user">Assign To</label>
+                                                    <h3 class="form-control"><?php
+                                                                                echo htmlspecialchars($_SESSION['userdetails']['firstname']) . '' .
+                                                                                    htmlspecialchars($_SESSION['userdetails']['lastname'])
+                                                                                ?>
+
+                                                    </h3>
+                                                    <input class='form-control'  id="userId" type='hidden' name='assigned_to'
+                                                        value='<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>'>
+
+                                                </div>
+
+                                                <div class="col-6 mt-2">
+                                                    <label for="department-select">Department</label>
+                                                    <select name="department_id" id="department-select" class="form-control" required>
+                                                        <option value="">Select Department</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 mt-2">
+                                                    <label for="user-head">Assigned By</label>
+                                                    <h3><?php
+                                                        echo htmlspecialchars($_SESSION['userinfo']['firstname']) . '' .
+                                                            htmlspecialchars($_SESSION['userinfo']['lastname'])
+                                                        ?></h3>
+                                                    <input type="hidden" name="assigned_by"
+                                                        value='<?php echo htmlspecialchars($_SESSION['userinfo']['id']) ?>' />
+                                                </div>
+                                                <div class="col-6 mt-3">
+                                                    <label for="due_date">Due Date</label>
+                                                    <input type="date" name="due_date" class="form-control" />
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3 w-auto d-flex justify-content-center ">
+                                                <button class="btn btn-primary w-auto">Create New Task</button>
+                                            </div>
+                                            <div class=" row flex-box">
+                                                <span class="errormsg text-danger fs-5"></span>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -198,32 +250,54 @@ if (isset($_SESSION['userdetails'])) {
         import processForm from '../assets/js/processForm.js';
         import alertFunction from '../assets/js/alertFunction.js';
         import handleFormMessage from '../assets/js/handleFormMessage.js';
+        import fetchUserId from '../assets/js/fetchUserId.js';
 
         document.addEventListener("DOMContentLoaded", () => {
 
             const userprofileForm = document.querySelector("#userprofile-form");
             const deleteForm = document.querySelector("#delete-account");
-           
+            const departmentSelect = document.querySelector('#department-select');
+            const addTaskform = document.getElementById("taskform-create");
+            const userId=document.getElementById("userId")
+
             if (userprofileForm) {
-            userprofileForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const resultData = await processForm(userprofileForm, '../api/userview/process.updateoneuser.php');
-                if (resultData) {
+                userprofileForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const resultData = await processForm(userprofileForm, '../api/userview/process.updateoneuser.php');
+                    if (resultData) {
+                        handleFormMessage(resultData);
+                    }
+                });
+            }
+
+            if (deleteForm) {
+                deleteForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const resultData = await processForm(deleteForm, '../api/userauth/process.deleteuser.php');
                     handleFormMessage(resultData);
-                }
-            });
-        }
+                });
+            }
+            if (addTaskform) {
+                addTaskform.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const resultData = await processForm(addTaskform, '../api/tasks/process.addtask.php');
+                    handleFormMessage(resultData);
+                });
+            }
 
-        if (deleteForm) {
-            deleteForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const resultData = await processForm(deleteForm, '../api/userauth/process.deleteuser.php');
-                handleFormMessage(resultData);
-            });
-        }
+            (async () => {
+               
+                const id=userId.value
+                const departmentdata = await fetchUserId('../api/departments/process.fetchuserdepartment.php',id)
+                fillUserDepartment(departmentdata.departments)
+            })()
+
+            const fillUserDepartment = (departments) => {
 
 
-            
+                departmentSelect.innerHTML += departments.map(dpt => (`<option value="${dpt.id}" >${dpt.name}</option>`))
+            }
+
 
 
 

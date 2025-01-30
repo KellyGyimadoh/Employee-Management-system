@@ -6,7 +6,7 @@ require '../../includes/sessions.php';
 header('Content-Type: application/json');
 $page= isset($_GET['page']) ? (int)($_GET['page']) : 1;
 $limit=isset($_GET['limit']) ? (int)($_GET['limit']) : 10;
-$id=isset($_GET['deptid']) ? (int)($_GET['deptid']) : null ;
+$id=isset($_GET['id']) ? (int)($_GET['id']) : null ;
 $search= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : " ";
 
 $offset=($page-1) * $limit;

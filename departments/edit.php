@@ -1,5 +1,5 @@
 <?php
-$title = "Manager Dashboard";
+$title = isset($_SESSION['departmentdetails'])? htmlspecialchars($_SESSION['departmentdetails']['name'].' '. 'Department Portal'):'Portal';
 require '../includes/sessions.php';
 include '../includes/head.php';
 
@@ -7,7 +7,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     header('location:../auth/login.php');
     die();
 }
-
+$allowed=checkAccount(['admin']);
 ?>
 
 <body class="fixed-navbar">
@@ -37,7 +37,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
             <div class="page-content fade-in-up">
                 <div class="ibox">
                     <div class="ibox-head">
-                        <div class="ibox-title">Edit Department</div>
+                        <div class="ibox-title">Department Details</div>
                     </div>
 
                     <div class="ibox-body">
@@ -59,10 +59,14 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                             <div class="col-md-4">
                                 <div class="text-md-right dataTables_filter" id="dataTable_filter">
                                     <form method="GET" id="searchdepartment">
-                                        <input type="search" name="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                        <input type="search" name="search" class="form-control form-control-sm" 
+                                        aria-controls="dataTable" placeholder="Search"
+                                         value="<?php echo isset($_GET['search']) ? 
+                                         htmlspecialchars($_GET['search']) : ''; ?>">
                                         <input type="hidden" name="limit">
                                         <input type="hidden" name="page">
-                                        <input type="hidden" name="deptid" id="deptid" value="<?php echo htmlspecialchars($_SESSION['departmentdetails']['id'])?>">
+                                        <input type="hidden" name="deptid" id="deptid" 
+                                        value="<?php echo htmlspecialchars($_SESSION['departmentdetails']['id'])?>">
                                         <button type="submit" class="btn btn-primary btn-sm mt-2">Search</button>
                                     </form>
                                 </div>
@@ -103,37 +107,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                     </tr>
                                 </tfoot>
                                 <tbody id="departmentWorkersTableBody">
-                                    <?php
-                                    if (isset($_SESSION['departmentworkerdetails'])) {
-                                        foreach ($_SESSION['departmentworkerdetails'] as $index => $worker): ?>
-                                            <tr>
-                                                <td><?php echo $index ?></td>
-                                                <td><?php echo $worker['firstname'] ?></td>
-                                                <td><?php echo $worker['lastname'] ?></td>
-                                                <td><?php echo $worker['email'] ?></td>
-                                                <td><?php echo $worker['phone'] ?></td>
-                                                <td>
-                                                    <?php
-                                                    $status = $worker['status'];
-                                                    echo $status == 1 ? "<button class='btn btn-success'>Active</button>"
-                                                        : "<button class='btn btn-danger'>Suspended</button>";
-                                                    ?>
-
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-primary btn-sm"
-                                                        href="../../api/userview/process.selectuser.php?userid=<?php echo htmlspecialchars($worker['user_id']) ?>">Edit</a>
-
-                                                </td>
-                                            </tr>
-
-
-
-                                    <?php endforeach;
-                                    } else {
-                                        echo "<tr>No workers available</tr>";
-                                    }
-                                    ?>
+                                   
                                 </tbody>
                             </table>
                             <div class="col-md-6">
@@ -144,7 +118,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 </nav>
                             </div>
                         </div>
-
+                        <?php if($allowed):?>
                         <h3 class="text-center mb-3">Edit Department</h3>
                         <form id="departmentform-edit">
                             <div class="row ">
@@ -169,7 +143,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 <div class='col-sm-6 form-group'>
                                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-                                    <input class='form-control' type='hidden' name='id' value="<?php echo htmlspecialchars($_SESSION['departmentdetails']['id']) ?>">
+                                    <input class='form-control' id="departmentid" type='hidden' name='id' value="<?php echo htmlspecialchars($_SESSION['departmentdetails']['id']) ?>">
                                 </div>
                                 <div class='form-group col-12  d-flex justify-content-center'>
                                     <button class='btn btn-danger m-5' id="del-btn" type='submit'>
@@ -190,6 +164,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 </div>
                             </form>
                         </div>
+                        <?php endif?>
 
                     </div>
 
@@ -216,65 +191,8 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-    
-    <script type="module">
-        import fetchAll from '../assets/js/fetchAll.js'
-        import alertFunction from '../assets/js/alertFunction.js'
-        import handleFormMessage from '../assets/js/handleFormMessage.js';
-        import processForm from '../assets/js/processForm.js';
-        document.addEventListener("DOMContentLoaded", () => {
-            const departmentselect = document.getElementById("departmenthead-select-edit")
-            const editDepartmentform = document.getElementById("departmentform-edit")
-            const deletedeptForm = document.querySelector("#deletedept-account");
-            const deletedeptHeadForm = document.querySelector("#deletedepthead");
-
-            if (editDepartmentform) {
-                editDepartmentform.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const resultData = await processForm(editDepartmentform, '../api/departments/process.updatedept.php');
-                    handleFormMessage(resultData);
-                });
-            }
-            if (deletedeptHeadForm) {
-                deletedeptHeadForm.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const resultData = await processForm(deletedeptHeadForm, '../api/departments/process.deletedepthead.php');
-                    handleFormMessage(resultData);
-                });
-            }
-
-            if (deletedeptForm) {
-                deletedeptForm.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-                    const resultData = await processForm(deletedeptForm, '../api/departments/process.delete.php');
-                    handleFormMessage(resultData);
-                });
-            }
-
-
-            (async () => {
-                const data = await fetchAll('../api/userview/process.fetchall.php')
-                fillDepartmentSelect(data.users)
-            })()
-
-            const fillDepartmentSelect = (users) => {
-
-                departmentselect.innerHTML += users.map((user) =>
-
-                    (
-                        `<option value="${user.id}">${user.firstname} ${user.lastname}</option>`
-
-                    )
-                )
-            }
-
-          
-
-
-
-
-        })
-    </script>
+    <script src="../assets/js/deptworkers.js" type="module"></script>
+   
 </body>
 
 </html>

@@ -4,13 +4,13 @@ include '../includes/head.php';
 require '../includes/sessions.php';
 ?>
 
-<body class="bg-silver-300">
+<body class="bg-silver-300" id="registerfront">
     <div class="content mb-4">
         <?php
         include '../includes/alert.php';
         ?>
         <div class="brand">
-            <a class="link" href="index.html">INFO SPACE TECH <i class="ti-joomla"></i></a>
+            <a class="link text-warning" href="index.html">INFO SPACE TECH <i class="ti-joomla"></i></a>
         </div>
         <form id="register-form"  method="post" enctype="multipart/form-data">
             <h2 class="login-title">Sign Up</h2>

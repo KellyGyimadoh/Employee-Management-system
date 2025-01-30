@@ -150,8 +150,8 @@ class Department extends Dbconnection
 
 
             $stmt = $conn->prepare($sql);
-            if(!empty($deptid)){
-                $stmt->bindParam(":id",$deptid);
+            if (!empty($deptid)) {
+                $stmt->bindParam(":id", $deptid);
             }
             $stmt->execute();
 
@@ -170,29 +170,22 @@ class Department extends Dbconnection
     {
         try {
             $conn = parent::connect_to_database();
-
-            // Query to count the total number of users in a department
+    
             $sql = "SELECT COUNT(*) as total_users 
                     FROM users_departments 
-                    WHERE users_departments.department_id = :id";
-
+                    WHERE department_id = :id";
+    
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue(":id", $id, PDO::PARAM_INT); // Bind department id
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
-
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($result) {
-                return $result['total_users']; // Return total count
-            }
-
-            return 0; // Return 0 if no users found
-
+    
+            return $stmt->fetchColumn() ?: 0; // Fetch column directly, return 0 if null
+    
         } catch (PDOException $e) {
             die('Error occurred: ' . $e->getMessage());
         }
     }
-
+    
 
     protected function getAllDepartmentWorkersDetails($id)
     {
@@ -480,52 +473,46 @@ class Department extends Dbconnection
         try {
             $conn = parent::connect_to_database();
             $sql = "SELECT 
-                    users.id AS user_id,
-                    users.firstname,
-                    users.lastname,
-                    users.email,
-                    users.phone,
-                    users.status
-                FROM users_departments
-                LEFT JOIN users 
-                    ON users_departments.user_id = users.id
-                WHERE users_departments.department_id =:id
-            ";
+                users.id AS user_id,
+                users.firstname,
+                users.lastname,
+                users.email,
+                users.phone,
+                users.status,
+                departments.id AS department_id
+            FROM users
+            LEFT JOIN users_departments 
+                ON users.id = users_departments.user_id
+            LEFT JOIN departments 
+                ON users_departments.department_id = departments.id
+            WHERE users_departments.department_id = :id";
+
             if (!empty($search)) {
-
-                $sql .= " AND users.firstname OR users.lastname LIKE :search  ";
+                $sql .= " AND (users.firstname LIKE :search OR users.lastname LIKE :search)";
             }
 
-            if (!empty($limit) && !empty($offset)) {
-                $sql .= " LIMIT :limit OFFSET :offset";
-            }
+            $sql .= " LIMIT :limit OFFSET :offset"; // Always include LIMIT & OFFSET
 
             $stmt = $conn->prepare($sql);
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
             if (!empty($search)) {
-                $stmt->bindValue(":search", "%$search%");
+                $search = "%$search%"; // Add wildcards for LIKE search
+                $stmt->bindValue(":search", $search, PDO::PARAM_STR);
             }
-            if (!empty($search)) {
-                $search = "%$search%"; // Add wildcards for LIKE
-                $stmt->bindParam(":search", $search, PDO::PARAM_STR);
-            }
-            if (!empty($limit) && !empty($offset)) {
-                $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-                $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
-            }
-           
+
+            $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
+            $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+
             $stmt->execute();
 
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if ($result && $result > 0) {
-                return $result;
-            } else {
-                return [];
-            }
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Directly return the result
+
         } catch (PDOException $e) {
-            die('error occured' . $e->getMessage());
+            die('Error occurred: ' . $e->getMessage());
         }
     }
+
     protected function getOneUserDepartmentDetails($limit = null, $offset = null, $search = null, $id)
     {
         try {
@@ -533,10 +520,14 @@ class Department extends Dbconnection
             $sql = "SELECT 
                 departments.id,
                 departments.name, 
-                departments.head  
+                departments.head,
+                departments.email,departments.phone,
+                users.firstname,users.lastname
                 FROM departments
                 LEFT JOIN users_departments 
                 ON departments.id = users_departments.department_id
+                LEFT JOIN users ON
+                departments.head=users.id
                 WHERE users_departments.user_id = :userid";
 
             // Dynamically append conditions
@@ -595,33 +586,33 @@ class Department extends Dbconnection
             $conn = parent::connect_to_database();
             $allsql = "SELECT COUNT(*) as total FROM departments";
             $allstmt = $conn->prepare($allsql);
-           
+
             $allstmt->execute();
 
-            $allResult=$allstmt->fetch(PDO::FETCH_ASSOC);
-            
+            $allResult = $allstmt->fetch(PDO::FETCH_ASSOC);
+
             $headsql = "SELECT COUNT(*) as head_total FROM departments WHERE head IS NOT NULL";
             $headstmt = $conn->prepare($headsql);
-           
+
             $headstmt->execute();
-            $headResult=$headstmt->fetch(PDO::FETCH_ASSOC);
-            
+            $headResult = $headstmt->fetch(PDO::FETCH_ASSOC);
+
             $activesql = "SELECT COUNT(*) as active_total FROM departments WHERE status=1";
             $activestmt = $conn->prepare($activesql);
-           
+
             $activestmt->execute();
-            $activeResult=$activestmt->fetch(PDO::FETCH_ASSOC);
+            $activeResult = $activestmt->fetch(PDO::FETCH_ASSOC);
 
             $inactivesql = "SELECT COUNT(*) as inactive_total FROM departments WHERE status=2";
             $inactivestmt = $conn->prepare($inactivesql);
             $inactivestmt->execute();
-            $inactiveResult=$inactivestmt->fetch(PDO::FETCH_ASSOC);
-            
+            $inactiveResult = $inactivestmt->fetch(PDO::FETCH_ASSOC);
+
             return [
-                'departments_total'=>$allResult['total'],
-                'has_head_total'=>$headResult['head_total'],
-                'active_total'=>$activeResult['active_total'],
-                'inactive_total'=>$inactiveResult['inactive_total']
+                'departments_total' => $allResult['total'],
+                'has_head_total' => $headResult['head_total'],
+                'active_total' => $activeResult['active_total'],
+                'inactive_total' => $inactiveResult['inactive_total']
 
             ];
         } catch (PDOException $e) {

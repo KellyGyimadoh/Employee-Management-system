@@ -45,12 +45,13 @@ if (isset($_SESSION['userinfo'])) {
                         <div class="ibox">
                             <div class="ibox-body text-center">
                                 <div class="m-t-20">
-                                    <img class="img-circle" src="<?php echo isset($userinfo['image']) ? htmlspecialchars($userinfo['image']) : '../assets/img/users/u3.jpg' ?>" />
+                                    <img class="img-circle" src="<?php echo isset($userinfo['image'])
+                                                                        ? htmlspecialchars($userinfo['image']) : '../assets/img/users/u3.jpg' ?>" />
 
                                 </div>
                                 <h5 class="font-strong m-b-10 m-t-10"><?php echo htmlspecialchars($userinfo['firstname'] . ' ' . $userinfo['lastname']) ?></h5>
                                 <div class="m-b-20 text-muted"><?php echo htmlspecialchars($userinfo['account_type']) ?></div>
-                                <div class="profile-social m-b-20">
+                                <!-- <div class="profile-social m-b-20">
                                     <a href="javascript:;"><i class="fa fa-twitter"></i></a>
                                     <a href="javascript:;"><i class="fa fa-facebook"></i></a>
                                     <a href="javascript:;"><i class="fa fa-pinterest"></i></a>
@@ -59,7 +60,7 @@ if (isset($_SESSION['userinfo'])) {
                                 <div>
                                     <button class="btn btn-info btn-rounded m-b-5"><i class="fa fa-plus"></i> Follow</button>
                                     <button class="btn btn-default btn-rounded m-b-5">Message</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
@@ -132,60 +133,7 @@ if (isset($_SESSION['userinfo'])) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>11</td>
-                                                    <td>@Jack</td>
-                                                    <td>$564.00</td>
-                                                    <td>
-                                                        <span class="badge badge-success">Shipped</span>
-                                                    </td>
-                                                    <td>10/07/2017</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>12</td>
-                                                    <td>@Amalia</td>
-                                                    <td>$220.60</td>
-                                                    <td>
-                                                        <span class="badge badge-success">Shipped</span>
-                                                    </td>
-                                                    <td>10/07/2017</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>13</td>
-                                                    <td>@Emma</td>
-                                                    <td>$760.00</td>
-                                                    <td>
-                                                        <span class="badge badge-default">Pending</span>
-                                                    </td>
-                                                    <td>10/07/2017</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>14</td>
-                                                    <td>@James</td>
-                                                    <td>$87.60</td>
-                                                    <td>
-                                                        <span class="badge badge-warning">Expired</span>
-                                                    </td>
-                                                    <td>10/07/2017</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>15</td>
-                                                    <td>@Ava</td>
-                                                    <td>$430.50</td>
-                                                    <td>
-                                                        <span class="badge badge-default">Pending</span>
-                                                    </td>
-                                                    <td>10/07/2017</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>16</td>
-                                                    <td>@Noah</td>
-                                                    <td>$64.00</td>
-                                                    <td>
-                                                        <span class="badge badge-success">Shipped</span>
-                                                    </td>
-                                                    <td>10/07/2017</td>
-                                                </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -193,13 +141,10 @@ if (isset($_SESSION['userinfo'])) {
                                         <form method="post" id="profile-form">
                                             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
                                             <?php
-                                            if(isset($_SESSION['accounttype']) && $_SESSION['accounttype']=='admin')
-                                            {
-                                             managerProfileForm(); 
-                                            }else
-                                            {
+                                            if (isset($_SESSION['accounttype']) && $_SESSION['accounttype'] == 'admin') {
+                                                managerProfileForm();
+                                            } else {
                                                 userProfileForm();
-
                                             }
                                             ?>
                                         </form>
@@ -226,7 +171,7 @@ if (isset($_SESSION['userinfo'])) {
                                                 </div>
                                             </form>
                                             <div class="flex-box">
-                                                    <span class="errormsg text-danger fs-5"></span>
+                                                <span class="errormsg text-danger fs-5"></span>
                                             </div>
                                             <!-- passwordform -->
                                         </div>
@@ -249,34 +194,7 @@ if (isset($_SESSION['userinfo'])) {
                                                     <div class="font-13">Lorem Ipsum is simply dummy text.</div>
                                                 </div>
                                             </li>
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-announcement font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading">7 new feedback <small class="float-right text-muted">Today</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-check font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading text-success">Issue fixed <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-shopping-cart font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading">7 New orders <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-reload font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading text-danger">Server warning <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
+
                                         </ul>
                                     </div>
                                 </div>
@@ -284,28 +202,14 @@ if (isset($_SESSION['userinfo'])) {
                         </div>
                     </div>
                 </div>
-                <style>
-                    .profile-social a {
-                        font-size: 16px;
-                        margin: 0 10px;
-                        color: #999;
-                    }
 
-                    .profile-social a:hover {
-                        color: #485b6f;
-                    }
-
-                    .profile-stat-count {
-                        font-size: 22px
-                    }
-                </style>
 
             </div>
             <!-- END PAGE CONTENT-->
-           <?php
-           
-           include '../includes/footer.php'
-           ?>
+            <?php
+
+            include '../includes/footer.php'
+            ?>
         </div>
     </div>
 
@@ -321,35 +225,29 @@ if (isset($_SESSION['userinfo'])) {
     include('../includes/scripts.php');
     ?>
     <script type="module">
-         import fetchAll from '../assets/js/fetchAll.js'
-         import alertFunction from '../assets/js/alertFunction.js'
-         import handleFormMessage from '../assets/js/handleFormMessage.js';
-         import processForm from '../assets/js/processForm.js';
+        import fetchAll from '../assets/js/fetchAll.js'
+        import alertFunction from '../assets/js/alertFunction.js'
+        import handleFormMessage from '../assets/js/handleFormMessage.js';
+        import processForm from '../assets/js/processForm.js';
         document.addEventListener("DOMContentLoaded", () => {
             const profileForm = document.querySelector("#profile-form");
             const passwordForm = document.querySelector("#password-form");
             if (profileForm) {
                 profileForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const resultData = await processForm(profileForm, '../api/userauth/process.updateuser.php');
-                handleFormMessage(resultData);
-            });
+                    e.preventDefault();
+                    const resultData = await processForm(profileForm, '../api/userauth/process.updateuser.php');
+                    handleFormMessage(resultData);
+                });
             }
             if (passwordForm) {
                 passwordForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const resultData = await processForm(passwordForm, '../api/userauth/process.updatepassword.php');
-                handleFormMessage(resultData);
-            });
+                    e.preventDefault();
+                    const resultData = await processForm(passwordForm, '../api/userauth/process.updatepassword.php');
+                    handleFormMessage(resultData);
+                });
             }
 
         })
-
-
-        
-       
-        
-        
     </script>
 </body>
 

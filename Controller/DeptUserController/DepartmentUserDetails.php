@@ -42,7 +42,8 @@ private $id;
 
     public function getDepartmentWorkersProfileDetails(){
         $departmentresult=$this->selectOneDepartmentDetail($this->id);
-        $result= $this->getDepartmentWorkersDetails($this->limit,$this->offset,$this->search,$this->id);
+        $result= $this->getDepartmentWorkersDetails($this->limit,$this->offset,
+        $this->search,$this->id);
         
         if($result){
             $_SESSION['departmentdetails']=$departmentresult;

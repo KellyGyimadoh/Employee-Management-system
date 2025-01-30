@@ -49,6 +49,7 @@
     font-size: 22px
 }
 
+
 .dptcard{
     height:fit-content !important;
     background-color: rgb(223, 243, 175) !important;
@@ -67,4 +68,12 @@
 
 .dptmini{
     height: max-content !important;
+}
+
+#registerfront{
+background-image: url('../img/blog/storm.jpg');
+}
+
+#loginfront{
+    background-image: url('../img/blog/storm.jpg');
 }

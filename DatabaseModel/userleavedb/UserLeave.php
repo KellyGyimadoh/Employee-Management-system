@@ -280,11 +280,14 @@ protected function UpdateNewLeave($leaveid,$startDate,$endDate,$type,$status=nul
             $stmt=$conn->prepare($sql);
             $stmt->bindParam(":leaveid",$leaveid);
             $stmt->bindParam(":start_date",$startDate);
-            $stmt->bindParam(":approved_by",$approvedBy);
+           
             $stmt->bindParam(":end_date",$endDate);
             $stmt->bindParam(":type",$type);
             if(!empty($status)){
                 $stmt->bindParam(":status",$status);
+            }
+            if(!empty($approvedBy)){
+                $stmt->bindParam(":approved_by",$approvedBy);
             }
             $stmt->execute();
 

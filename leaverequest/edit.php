@@ -61,6 +61,23 @@ if (
                             </div>
                         </form>
 
+                        <form id="leaveform-delete">
+                            <div class="row mt-3">
+
+                                <input type="hidden" name="csrf_token"
+                                    value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                    <input type="hidden" name="id"
+                                    value="<?php echo htmlspecialchars($_SESSION['userleavedetails']['id']) ?>">
+                              
+
+                            <div class="row m-3 w-auto d-flex justify-content-center ">
+                                <button class="btn btn-danger w-auto">Delete request</button>
+                            </div>
+                            <div class=" row flex-box">
+                                <span class="errormsg text-danger fs-5"></span>
+                            </div>
+                        </form>
+
 
                     </div>
                 </div>
@@ -94,6 +111,7 @@ if (
         import fetchUserId from '../assets/js/fetchUserId.js'
         document.addEventListener("DOMContentLoaded", () => {
             const editUserLeave = document.getElementById("leaveform-create")
+            const deleteUserLeave = document.getElementById("leaveform-delete")
           
             const userHead = document.getElementById("user-head")
 
@@ -101,6 +119,14 @@ if (
                 editUserLeave.addEventListener("submit", async (e) => {
                     e.preventDefault();
                     const resultData = await processForm(editUserLeave, '../api/leave/process.updateleave.php');
+                    handleFormMessage(resultData);
+                });
+            }
+
+            if (deleteUserLeave) {
+                deleteUserLeave.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const resultData = await processForm(deleteUserLeave, '../api/leave/process.deleterequest.php');
                     handleFormMessage(resultData);
                 });
             }

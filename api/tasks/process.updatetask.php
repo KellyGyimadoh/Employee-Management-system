@@ -29,9 +29,9 @@ try {
     }
     
     if(!isloggedin() || $_SESSION['accounttype']!=='admin'){
-        http_response_code(403);
-        echo json_encode(['success'=>false,'message'=>'action not allowed']);
-        die();
+        $response=['success' => false, 'message' => 'Action not allowed'];
+        echo json_encode($response);
+          die();
     }
     if((int)$status!==(int)$correctStatus){
         $response=['success' => false, 'message' => 'Action not allowed Status mistake'];

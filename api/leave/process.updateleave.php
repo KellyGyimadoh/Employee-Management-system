@@ -12,6 +12,7 @@ try {
     }
 
 $leaveid= filter_var($input['id'],FILTER_SANITIZE_NUMBER_INT);
+$userid= filter_var($input['user_id'],FILTER_SANITIZE_NUMBER_INT);
 $approvedBy=!empty($input['approved_by'])? 
 filter_var($input['approved_by'],FILTER_SANITIZE_NUMBER_INT):null;
 $status= !empty($input['status'])? filter_var($input['status'],FILTER_SANITIZE_NUMBER_INT):null;

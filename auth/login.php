@@ -5,13 +5,13 @@ include '../includes/sessions.php';
 
 ?>
 
-<body class="bg-silver-300">
+<body class="bg-silver-300" id="loginfront">
    <?php
    include '../includes/alert.php';
    ?>
     <div class="content">
         <div class="brand">
-            <a class="link" href="login.php">INFO SPACE TECH <i class="ti-joomla"></i></a>
+            <a class="link text-warning" href="login.php">INFO SPACE TECH <i class="ti-joomla"></i></a>
         </div>
         <form id="login-form" method="post">
             <h2 class="login-title">Log in </h2>

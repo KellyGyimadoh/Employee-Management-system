@@ -1,5 +1,9 @@
 
 import fetchData from "./fetchData.js";
+import fetchAll from './fetchAll.js'
+import alertFunction from './alertFunction.js'
+import handleFormMessage from './handleFormMessage.js';
+import processForm from './processForm.js';
 document.addEventListener("DOMContentLoaded", () => {
 
     const deptid=document.getElementById("deptid");
@@ -7,6 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const departmentWorkersTable=document.getElementById("departmentWorkersTableBody");
     const searchdptForm=document.getElementById("searchdepartment");
     const paginator=document.querySelector(".dptworkerpagination")
+    
+    const departmentselect = document.getElementById("departmenthead-select-edit")
+    const editDepartmentform = document.getElementById("departmentform-edit")
+    const deletedeptForm = document.querySelector("#deletedept-account");
+    const deletedeptHeadForm = document.querySelector("#deletedepthead");
+   
 
     let recordsPerPageforDept=recordsPerPageDpt.value;
     let departmentid=deptid.value;
@@ -18,12 +28,58 @@ document.addEventListener("DOMContentLoaded", () => {
    
   
    (async ()=>{
-    const deptData= await fetchData('../../api/departments/process.viewdeptworkers.php',currentPage,recordsPerPageforDept,searchQuery,departmentid)
+    const deptData= await fetchData('../../api/departments/process.viewdeptworkers.php',currentPage,
+        recordsPerPageforDept,searchQuery,departmentid,null,null)
+    
     if(deptData){
        
         renderDeptTable(deptData.departmentworkers)
-        renderdeptPaginator(deptData.pagination.total_pages,deptData.pagination.current_page) }
+        renderdeptPaginator(deptData.pagination.total_pages,deptData.pagination.current_page) 
+    }
+
+
+    const data = await fetchAll('../api/userview/process.fetchall.php')
+        fillDepartmentSelect(data.users)
    })()
+
+   if (editDepartmentform) {
+    editDepartmentform.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const resultData = await processForm(editDepartmentform, '../api/departments/process.updatedept.php');
+        handleFormMessage(resultData);
+    });
+}
+if (deletedeptHeadForm) {
+    deletedeptHeadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const resultData = await processForm(deletedeptHeadForm, '../api/departments/process.deletedepthead.php');
+        handleFormMessage(resultData);
+    });
+}
+
+if (deletedeptForm) {
+    deletedeptForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const resultData = await processForm(deletedeptForm, '../api/departments/process.delete.php');
+        handleFormMessage(resultData);
+    });
+}
+
+
+
+
+const fillDepartmentSelect = (users) => {
+
+    departmentselect.innerHTML += users.map((user) =>
+
+        (
+            `<option value="${user.id}">${user.firstname} ${user.lastname}</option>`
+
+        )
+    )
+}
+
+
 
 
     
@@ -42,7 +98,7 @@ const renderDeptTable=(workers)=>{
             :`<button class="btn btn-danger">Suspended</button>`}</td>
             
             <td>
-            <a class="btn btn-primary" href=".../../api/userview/process.selectuser.php?userid=${worker.user_id}">Edit</a>
+            <a class="btn btn-primary" href="../api/userview/process.selectuser.php?userid=${worker.user_id}">Edit</a>
             </td>
             </tr>`
     ).join("")
@@ -72,7 +128,8 @@ recordsPerPageDpt.addEventListener("change",(e)=>{
     let departmentid=deptid.value;
     currentPage=1
     (async ()=>{
-        const deptWorkersData= await fetchData('../../api/departments/process.viewdeptworkers.php',currentPage,recordsPerPageforDept,null,departmentid)
+        const deptWorkersData= await fetchData('../../api/departments/process.viewdeptworkers.php',
+            currentPage,recordsPerPageforDept,searchQuery,departmentid,null,null)
         if(deptWorkersData){
            
             renderDeptTable(deptWorkersData.departmentworkers)
@@ -88,7 +145,8 @@ searchdptForm.addEventListener("submit",(e)=>{
     let recordsPerPageforDept=recordsPerPageDpt.value;
     let departmentid=deptid.value;
     (async ()=>{
-        const deptWorkersData= await fetchData('../../api/departments/process.viewdeptworkers.php',currentPage,recordsPerPageforDept,null,departmentid)
+        const deptWorkersData= await fetchData('../../api/departments/process.viewdeptworkers.php',currentPage,
+            recordsPerPageforDept,searchQuery,departmentid,null,null)
         if(deptWorkersData){
            
             renderDeptTable(deptWorkersData.departmentworkers)
@@ -103,7 +161,8 @@ paginator.addEventListener("click",(e)=>{
     if(page){
         currentPage=parseInt(page);
         (async ()=>{
-            const deptWorkersData= await fetchData('../../api/departments/process.viewdeptworkers.php',currentPage,recordsPerPageforDept,null,departmentid)
+            const deptWorkersData= await fetchData('../../api/departments/process.viewdeptworkers.php',
+                currentPage,recordsPerPageforDept,null,departmentid)
             if(deptWorkersData){
                
                 renderDeptTable(deptWorkersData.departmentworkers)

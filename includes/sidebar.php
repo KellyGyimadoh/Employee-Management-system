@@ -192,10 +192,15 @@ $allowed = checkAccount(['admin']);
                     <li>
                         <a href="../leaverequest/show.php">My Leave Records</a>
                     </li>
+                    <?php
+                    if($allowed):
+                    ?>
                     <li>
                         <a href="../leaverequest/index.php">View All Leave Records</a>
                     </li>
-
+                    <?php
+                    endif
+                    ?>
 
 
                 </ul>

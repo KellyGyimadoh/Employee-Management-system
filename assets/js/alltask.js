@@ -126,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
                  <input type="hidden" name="csrf_token" value='${getCsrfToken()}'>
                  <input type="hidden" name="status" value='${status}'>
                  <input type="hidden" name="due_date" value='${duedate}'>
+                 <input type="hidden" name="userid" value='${userid}'>
                 <button  class='btn btn-primary'>Mark Complete</button>
                 </form>
                 `

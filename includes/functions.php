@@ -29,9 +29,9 @@ function regenerate_session_id_loggedin()
 
 function checkAccount($accounttype)
 {
-    if(isset($_SESSION['accounttype'])){
+    if (isset($_SESSION['accounttype'])) {
 
-        $account =htmlspecialchars($_SESSION['accounttype']) ;
+        $account = htmlspecialchars($_SESSION['accounttype']);
     }
     //get available account
     $allow = true;
@@ -41,8 +41,7 @@ function checkAccount($accounttype)
         } else {
             return !$allow;
         }
-    } 
-    
+    }
 }
 
 function isloggedin(): bool
@@ -1087,11 +1086,13 @@ function editTaskForm()
     </div>";
 }
 
-function editUserLeaveForm(){
-    $result=$_SESSION['userleavedetails'];
-    if(isset($result['id'])){
-        echo"<input type='hidden' name='id'
-value='".$result['id']."'>
+function editUserLeaveForm()
+{
+    $allowed = checkAccount(['admin']);
+    $result = $_SESSION['userleavedetails'];
+    if (isset($result['id'])) {
+        echo "<input type='hidden' name='id'
+value='" . $result['id'] . "'>
 ";
     }
 
@@ -1101,37 +1102,40 @@ value='".$result['id']."'>
     echo "
     <div class='col-6 mt-2'>
         <label>Requested By</label>
-        <input type='text'  class='form-control' value='".htmlspecialchars($userFirstname).' '.
-        htmlspecialchars($userLastname)."' disabled>
+        <h3  class='form-control'> " . htmlspecialchars($userFirstname) . ' ' .
+        htmlspecialchars($userLastname) . " </h3>
+        <input type='hidden' name='user_id' value='" . htmlspecialchars($requestedBy) . "' />
         </div>
         ";
 
-    $type=$result['type'] ?? '';
-    echo"<div class='col-6 mt-2'>
+    $type = $result['type'] ?? '';
+    echo "<div class='col-6 mt-2'>
 <label class='m-2' for='type'>Reason</label>
 <input type='text' name='type' class='form-control' placeholder='Reason' 
-value='".htmlspecialchars($type)."' required>
+value='" . htmlspecialchars($type) . "' required>
 </div>";
 
-$startDate=$result['start_date']??'';
-echo"<div class='col-6 mt-2'>
+    $startDate = $result['start_date'] ?? '';
+    echo "<div class='col-6 mt-2'>
 <label class='m-2' for='start_date'>Start Date</label>
-<input type='date' name='start_date' class='form-control' value='".htmlspecialchars($startDate)."'>
+<input type='date' name='start_date' class='form-control' value='" . htmlspecialchars($startDate) . "'>
 </div>
 
 </div>
 ";
 
-$endDate=$result['end_date']??'';
-echo"<div class='row'>
+    $endDate = $result['end_date'] ?? '';
+    echo "<div class='row'>
 <div class='col-6 mt-2'>
 <label class='m-2' for='end_date'>End Date</label>
-<input type='date' name='end_date' class='form-control' value='".htmlspecialchars($endDate)."'>
+<input type='date' name='end_date' class='form-control' value='" . htmlspecialchars($endDate) . "'>
 </div>
 ";
 
-$status = $result['status'] ?? '';
-echo "
+
+    $status = $result['status'] ?? '';
+    if ($allowed) {
+        echo "
 <div class='col-6 mt-2'>
     <label for='status'>Status</label>
     <select name='status' id='status' class='form-control' required>
@@ -1141,28 +1145,57 @@ echo "
         <option value='3' " . ($status == '3' ? 'selected' : '') . ">Rejected</option>
     </select>
 </div>";
+    } else {
 
- // Assigned By
- $assignedBy = $result['approved_by'] ?? '';
- $headFirstname = $result['approved_by_firstname'] ?? '';
- $headLastname = $result['approved_by_lastname'] ?? '';
- echo "
+        echo "
+    <div class='col-6 mt-2'>
+        <label for='status'>Status</label>
+        <h3 class='form-control'> " . htmlspecialchars(checkStatusForLeave($status)) . "<h3>
+           
+        </select>
+    </div>";
+    }
+    // Assigned By
+    $approvedBy = $result['approved_by'] ?? '';
+    $headFirstname = $result['approved_by_firstname'] ?? '';
+    $headLastname = $result['approved_by_lastname'] ?? '';
+    if ($allowed) {
+        echo "
  <div class='col-6 mt-2'>
      <label for='userhead'>Assigned By</label>
      <select name='approved_by' id='user-head' class='form-control' required>
          <option value=''>Select Head</option>
-         " . (!empty($assignedBy) ? "<option value='$assignedBy' selected>$headFirstname $headLastname</option>" : "") . "
+         " . (!empty($approvedBy) ? "<option value='$approvedBy' selected>$headFirstname $headLastname</option>" : "") . "
      </select>
  </div>
 </div> 
  ";
+    } else {
+
+        echo "
+    <div class='col-6 mt-2'>
+        <label for='userhead'>Assigned By</label>
+       
+          <h3>" . (!empty($approvedBy) ? "$headFirstname $headLastname</option>" : "Not Approved Yet") . "
+        </select>
+    </div>
+   </div> 
+    ";
+    }
 }
 
+function checkStatusForLeave($stat)
+{
+    $correctString = '';
+    switch ($stat) {
+        case 1:
+            $correctString = 'Pending';
+            break;
+        case 2:
+            $correctString = 'Approved';
+        case 3:
+            $correctString = 'Rejected';
+    }
 
-
-
-
-
-
-
-
+    return $correctString;
+}

@@ -22,7 +22,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
-                <h1 class="page-title">ALL DEPARTMENTS</h1>
+                <h1 class="page-title">MY DEPARTMENT</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="allworkers.php"><i class="la la-home font-20"></i></a>
@@ -69,8 +69,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                     <th>Head Of Department</th>
                                     <th>Department Email</th>
                                     <th>Department Phone</th>
-                                    <th>Total Workers</th>
-                                    <th>Account Registered</th>
+                                   
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -82,8 +81,6 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                     <th>Head Of Department</th>
                                     <th>Department Email</th>
                                     <th>Department Phone</th>
-                                    <th>Total Workers</th>
-                                    <th>Account Registered</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -124,7 +121,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-    <script src="../assets/js/dept.js" type="module"></script>
+    <script src="../assets/js/userdept.js" type="module"></script>
 </body>
 
 </html>

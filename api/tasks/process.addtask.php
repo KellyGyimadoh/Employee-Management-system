@@ -16,9 +16,18 @@ try {
     $description=filter_var($input['description'],FILTER_SANITIZE_SPECIAL_CHARS);
     $duedate=filter_var($input['due_date'],FILTER_SANITIZE_SPECIAL_CHARS);
     $csrfToken=$input['csrf_token'];
-    if(!isloggedin() || $_SESSION['accounttype']!=='admin'){
-        http_response_code(403);
-        echo json_encode(['success'=>false,'message'=>'action not allowed ']);
+    if (
+        !isloggedin() || 
+        (
+            ($_SESSION['accounttype'] !== 'admin') &&
+            (!isset($_SESSION['userinfo']['id']) || (int)$_SESSION['userinfo']['id'] !== (int)$assignedBy)
+        )
+    ) {
+        $response=['success' => false, 'message' => 'Action not allowed'];
+        echo json_encode($response);
+        //http_response_code(403);
+    
+       
         die();
     }
     

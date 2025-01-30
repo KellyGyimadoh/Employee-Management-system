@@ -12,6 +12,7 @@ try {
     }
 
 $taskid= filter_var($input['id'],FILTER_SANITIZE_NUMBER_INT);
+$userid= filter_var($input['userid'],FILTER_SANITIZE_NUMBER_INT);
 $status= filter_var($input['status'],FILTER_SANITIZE_NUMBER_INT);
 $duedate=filter_var($input['due_date'],FILTER_SANITIZE_SPECIAL_CHARS);
 $dateCompleted=date('Y-m-d');
