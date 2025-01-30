@@ -86,6 +86,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                 <div class="col-6 mt-3">
                                     <label for="due_date">Due Date</label>
                                    <input type="date" name="due_date" class="form-control"/>
+                                  
                                 </div>
                             </div>
 

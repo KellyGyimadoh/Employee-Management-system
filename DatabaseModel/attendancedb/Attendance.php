@@ -348,13 +348,14 @@ class Attendance extends Dbconnection
     {
         try {
             $conn = parent::connect_to_database();
-            $presentSql = "SELECT COUNT(*) as total_present FROM attendance WHERE date=CURDATE() AND status=2";
+            $presentSql = "SELECT COUNT(*) as total_present FROM attendance WHERE date=CURDATE()
+             AND (status=2 OR Status=3)";
             $presentStmt = $conn->prepare($presentSql);
             $presentStmt->execute();
             $presentResult = $presentStmt->fetch(PDO::FETCH_ASSOC);
             
 
-            $absentSql = "SELECT COUNT(*) as total_absent FROM attendance WHERE date=CURDATE() AND status=1";
+            $absentSql = "SELECT COUNT(*) as total_absent FROM attendance WHERE date=CURDATE() AND status=1 ";
             $absentStmt = $conn->prepare($absentSql);
             $absentStmt->execute();
             $absentResult = $absentStmt->fetch(PDO::FETCH_ASSOC);
