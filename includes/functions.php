@@ -1086,3 +1086,83 @@ function editTaskForm()
     </div>
     </div>";
 }
+
+function editUserLeaveForm(){
+    $result=$_SESSION['userleavedetails'];
+    if(isset($result['id'])){
+        echo"<input type='hidden' name='id'
+value='".$result['id']."'>
+";
+    }
+
+    $requestedBy = $result['user_id'] ?? '';
+    $userFirstname = $result['requested_by_firstname'] ?? '';
+    $userLastname = $result['requested_by_lastname'] ?? '';
+    echo "
+    <div class='col-6 mt-2'>
+        <label>Requested By</label>
+        <input type='text'  class='form-control' value='".htmlspecialchars($userFirstname).' '.
+        htmlspecialchars($userLastname)."' disabled>
+        </div>
+        ";
+
+    $type=$result['type'] ?? '';
+    echo"<div class='col-6 mt-2'>
+<label class='m-2' for='type'>Reason</label>
+<input type='text' name='type' class='form-control' placeholder='Reason' 
+value='".htmlspecialchars($type)."' required>
+</div>";
+
+$startDate=$result['start_date']??'';
+echo"<div class='col-6 mt-2'>
+<label class='m-2' for='start_date'>Start Date</label>
+<input type='date' name='start_date' class='form-control' value='".htmlspecialchars($startDate)."'>
+</div>
+
+</div>
+";
+
+$endDate=$result['end_date']??'';
+echo"<div class='row'>
+<div class='col-6 mt-2'>
+<label class='m-2' for='end_date'>End Date</label>
+<input type='date' name='end_date' class='form-control' value='".htmlspecialchars($endDate)."'>
+</div>
+";
+
+$status = $result['status'] ?? '';
+echo "
+<div class='col-6 mt-2'>
+    <label for='status'>Status</label>
+    <select name='status' id='status' class='form-control' required>
+        <option value='' " . ($status == '' ? 'selected' : '') . ">Select Status</option>
+        <option value='1' " . ($status == '1' ? 'selected' : '') . ">Pending</option>
+        <option value='2' " . ($status == '2' ? 'selected' : '') . ">Approved</option>
+        <option value='3' " . ($status == '3' ? 'selected' : '') . ">Rejected</option>
+    </select>
+</div>";
+
+ // Assigned By
+ $assignedBy = $result['approved_by'] ?? '';
+ $headFirstname = $result['approved_by_firstname'] ?? '';
+ $headLastname = $result['approved_by_lastname'] ?? '';
+ echo "
+ <div class='col-6 mt-2'>
+     <label for='userhead'>Assigned By</label>
+     <select name='approved_by' id='user-head' class='form-control' required>
+         <option value=''>Select Head</option>
+         " . (!empty($assignedBy) ? "<option value='$assignedBy' selected>$headFirstname $headLastname</option>" : "") . "
+     </select>
+ </div>
+</div> 
+ ";
+}
+
+
+
+
+
+
+
+
+
