@@ -4,7 +4,8 @@ require '../includes/sessions.php';
 include '../includes/head.php';
 
 if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'] !== "admin") {
-    header('location:../auth/login.php');
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 ?>

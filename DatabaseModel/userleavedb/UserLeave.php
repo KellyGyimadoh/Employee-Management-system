@@ -343,18 +343,14 @@ protected function checkLeave($userid)
 {
         try {
             $conn=parent::connect_to_database();
-            $sql="SELECT COUNT(status) FROM userleave WHERE status=1 AND user_id=:userid 
+            $sql="SELECT COUNT(*) FROM userleave WHERE status=1 AND user_id=:userid 
             AND YEAR(created_at)=YEAR(CURDATE()) ";
             $stmt=$conn->prepare($sql);
-            $stmt->bindParam(":userid",$userid);
-           
+            $stmt->bindValue(":userid", $userid, PDO::PARAM_INT); 
+
              $stmt->execute();
-             $result=$stmt->fetch(PDO::FETCH_ASSOC);
-             if($result && (int)$result==(int)2){
-                return true;
-             }else{
-                return false;
-             }
+             $result=$stmt->fetchColumn();
+             return $result === 2;
             
         } catch (PDOException $e) {
             die('error removing data'.$e->getMessage());

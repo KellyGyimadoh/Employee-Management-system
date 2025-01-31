@@ -3,8 +3,12 @@ $title = "Payroll";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
-if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'] !== "admin") {
-    header('location:../auth/login.php');
+if (
+    !isloggedin() || !isset($_SESSION['accounttype']) ||
+    !in_array($_SESSION['accounttype'], [ 'admin']) || $_SESSION['userinfo']['status'] !== 1
+) {
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 $startOfLastMonth = date('F 1, Y', strtotime('first day of this month'));
@@ -70,7 +74,7 @@ $endOfLastMonth = date('F t, Y', strtotime('last day of this month'));
                         </div>
                     </div>
                     <div class="ibox-body">
-
+                        <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
@@ -102,6 +106,7 @@ $endOfLastMonth = date('F t, Y', strtotime('last day of this month'));
 
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

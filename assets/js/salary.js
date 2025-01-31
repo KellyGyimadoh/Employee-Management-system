@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
    
   
    (async ()=>{
-    const salaryData= await fetchData('../../api/salaries/process.viewtablesalaries.php',currentPage,recordsPerPageforSalary,searchQuery)
+    const salaryData= await fetchData('../../api/salaries/process.viewtablesalaries.php',currentPage,
+        recordsPerPageforSalary,searchQuery)
     if(salaryData){
        
         renderSalaryTable(salaryData.salaries)

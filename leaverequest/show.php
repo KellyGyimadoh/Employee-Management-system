@@ -7,7 +7,8 @@ if (
     !isloggedin() || !isset($_SESSION['accounttype']) ||
     !in_array($_SESSION['accounttype'], ['staff', 'admin']) || $_SESSION['userinfo']['status'] !== 1
 ) {
-    header("Location: ../auth/login.php");
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 
@@ -43,7 +44,7 @@ if (
                             <h2 class="m-b-5 font-strong totalrequestnumber">201</h2>
                             <div class="m-b-5">TOTAL LEAVES REQUESTED</div>
                             <i class="ti-shopping-cart widget-stat-icon"></i>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -52,7 +53,7 @@ if (
                         <div class="ibox-body">
                             <h2 class="m-b-5 font-strong pendingrequest">1250</h2>
                             <div class="m-b-5"> REQUEST PENDING</div><i class="ti-bar-chart widget-stat-icon"></i>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -61,7 +62,7 @@ if (
                         <div class="ibox-body">
                             <h2 class="m-b-5 font-strong approvedrequest">1250</h2>
                             <div class="m-b-5"> REQUEST APPROVED</div><i class="ti-check-box widget-stat-icon"></i>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -70,7 +71,7 @@ if (
                         <div class="ibox-body">
                             <h2 class="m-b-5 font-strong rejectedrequest">1250</h2>
                             <div class="m-b-5">REQUEST REJECTED</div><i class="ti-face-sad widget-stat-icon"></i>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -105,13 +106,13 @@ if (
                                                     ? htmlspecialchars($_GET['search']) : ''; ?>">
                                     <input type="hidden" name="limit">
                                     <input type="hidden" name="page">
-                                    <select class="form-control form-control-sm custom-select custom-select-sm" 
-                                    name="leavestatus">
+                                    <select class="form-control form-control-sm custom-select custom-select-sm"
+                                        name="leavestatus">
                                         <option value="">Filter By</option>
                                         <option value="1">Pending</option>
                                         <option value="2">Approved</option>
                                         <option value="3">Rejected</option>
-                                        
+
                                     </select>&nbsp;
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Search</button>
                                 </form>
@@ -119,41 +120,42 @@ if (
                         </div>
                     </div>
                     <div class="ibox-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Request Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Approved By</th>
+                                        <th>Set At</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
 
-                        <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Request Type</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Approved By</th>
-                                    <th>Set At</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                   
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
 
-                                    <th>No</th>
-                                   
-                                    <th>Request Type</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Approved By</th>
-                                    <th>Set At</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                   
-                                </tr>
-                            </tfoot>
-                            <tbody id="leaveTableBody">
+                                        <th>No</th>
+
+                                        <th>Request Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Approved By</th>
+                                        <th>Set At</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </tfoot>
+                                <tbody id="leaveTableBody">
 
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

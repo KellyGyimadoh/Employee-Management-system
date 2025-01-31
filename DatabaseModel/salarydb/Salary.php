@@ -308,4 +308,32 @@ class Salary extends Dbconnection
             die('error occured' . $e->getMessage());
         }
     }
+
+    protected function selectUserSalaryDetail( $userid)
+    {
+        try {
+            
+            $conn = parent::connect_to_database();
+            $sql = "SELECT salaries.id, salaries.user_id,salaries.base_salary,salaries.bonus,
+            salaries.overtime,salaries.deductions,salaries.total_salary,
+            users.firstname,users.lastname
+            FROM salaries
+            LEFT JOIN users ON salaries.user_id=users.id
+             WHERE salaries.user_id=:userid";
+
+            $stmt = $conn->prepare($sql);
+
+            $stmt->bindParam(":userid", $userid);
+
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result) {
+                return $result;
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            die('error fetching data' . $e->getMessage());
+        }
+    }
 }

@@ -5,9 +5,10 @@ include '../includes/head.php';
 
 if (
     !isloggedin() || !isset($_SESSION['accounttype']) ||
-    !in_array($_SESSION['accounttype'], ['staff', 'admin'])
+    !in_array($_SESSION['accounttype'], [ 'admin'])
 ) {
-    header("Location: ../auth/login.php");
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 if (isset($_SESSION['userdetails'])) {
@@ -51,7 +52,7 @@ $allowed = checkAccount(['admin']);
                                 </div>
                                 <h5 class="font-strong m-b-10 m-t-10"><?php echo htmlspecialchars($userinfo['firstname'] . ' ' . $userinfo['lastname']) ?></h5>
                                 <div class="m-b-20 text-muted"><?php echo htmlspecialchars($userinfo['account_type']) ?></div>
-                                <div class="profile-social m-b-20">
+                                <!-- <div class="profile-social m-b-20">
                                     <a href="javascript:;"><i class="fa fa-twitter"></i></a>
                                     <a href="javascript:;"><i class="fa fa-facebook"></i></a>
                                     <a href="javascript:;"><i class="fa fa-pinterest"></i></a>
@@ -60,7 +61,7 @@ $allowed = checkAccount(['admin']);
                                 <div>
                                     <button class="btn btn-info btn-rounded m-b-5"><i class="fa fa-plus"></i> Follow</button>
                                     <button class="btn btn-default btn-rounded m-b-5">Message</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
@@ -76,56 +77,80 @@ $allowed = checkAccount(['admin']);
                                         <li class="nav-item">
                                             <a class="nav-link" href="#tab-2" data-toggle="tab"><i class="ti-settings"></i> Settings</a>
                                         </li>
-                                    <?php endif ?>
+                                   
                                     <li class="nav-item">
                                         <a class="nav-link" href="#tab-3" data-toggle="tab"><i class="ti-announcement"></i>Assign Task</a>
                                     </li>
+                                    <?php else:?>
+                                        <input class='form-control' id="userId" type='hidden' name='assigned_to'
+                                                        value='<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>'>
+
+                                    <?php endif ?>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-1">
                                         <div class="row">
                                             <div class="col-md-12" style="border-right: 1px solid #eee;">
+                                                <?php if($allowed):?>
                                                 <h5 class="text-info m-b-20 m-t-10"><i class="fa fa-bar-chart"></i> Month Statistics</h5>
-                                                <div class="h2 m-0">$12,400<sup>.60</sup></div>
-                                                <div><small>Month income</small></div>
+                                                <div class="h2 m-0 userBasesalary">$12,400<sup>.60</sup></div>
+                                                <div class="mb-3"><small>Monthly Base Salary</small></div>
+
+                                                <div class="h2 m-0 userTotalsalary">$12,400<sup>.60</sup></div>
+                                                <div><small>Monthly Total Salary</small></div>
                                                 <div class="m-t-20 m-b-20">
-                                                    <div class="h4 m-0">120</div>
-                                                    <div class="d-flex justify-content-between"><small>Month income</small>
+                                                    <div class="h4 m-0 userbonus">120</div>
+                                                    <div class="d-flex justify-content-between"><small>Month Bonuses</small>
                                                         <span class="text-success font-12"><i class="fa fa-level-up"></i> +24%</span>
                                                     </div>
                                                     <div class="progress m-t-5">
-                                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width:50%; height:5px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        <div class="progress-bar progress-bar-success" role="progressbar"
+                                                            style="width:50%; height:5px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                                 <div class="m-b-20">
-                                                    <div class="h4 m-0">86</div>
-                                                    <div class="d-flex justify-content-between"><small>Month income</small>
+                                                    <div class="h4 m-0 userdeductions">86</div>
+                                                    <div class="d-flex justify-content-between"><small>Month Deductions</small>
                                                         <span class="text-warning font-12"><i class="fa fa-level-down"></i> -12%</span>
                                                     </div>
                                                     <div class="progress m-t-5">
-                                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:50%; height:5px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:50%; height:5px;"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
+                                                <div class="m-b-20">
+                                                    <div class="h4 m-0 userovertime">86</div>
+                                                    <div class="d-flex justify-content-between"><small>Month Overtime</small>
+                                                        <span class="text-warning font-12"><i class="fa fa-level-down"></i> -12%</span>
+                                                    </div>
+                                                    <div class="progress m-t-5">
+                                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:50%; height:5px;"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                                <?php endif?>
                                                 <ul class="list-group list-group-full list-group-divider">
-                                                    <li class="list-group-item">Projects
-                                                        <span class="pull-right color-orange">15</span>
+
+                                                    <li class="list-group-item">Total Tasks
+                                                        <span class="pull-right color-orange usertotaltask">148</span>
                                                     </li>
-                                                    <li class="list-group-item">Tasks
-                                                        <span class="pull-right color-orange">148</span>
+                                                    <li class="list-group-item">Task Pending
+                                                        <span class="pull-right color-orange userpendingtask">72</span>
                                                     </li>
-                                                    <li class="list-group-item">Articles
-                                                        <span class="pull-right color-orange">72</span>
+                                                    <li class="list-group-item">Task completed
+                                                        <span class="pull-right color-orange usercompletedtask">44</span>
                                                     </li>
-                                                    <li class="list-group-item">Friends
-                                                        <span class="pull-right color-orange">44</span>
+                                                    <li class="list-group-item">Task Completed Late
+                                                        <span class="pull-right color-orange userlatetask">44</span>
                                                     </li>
                                                 </ul>
                                             </div>
 
                                         </div>
-                                        <h4 class="text-info m-b-20 m-t-20"><i class="fa fa-shopping-basket"></i> Latest Orders</h4>
 
                                     </div>
+
+
                                     <?php
                                     if (isset($_SESSION['accounttype']) && $_SESSION['accounttype'] == 'admin'):
 
@@ -145,7 +170,7 @@ $allowed = checkAccount(['admin']);
                                                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
 
                                                         <input class='form-control' type='hidden' name='id'
-                                                         value="<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>">
+                                                            value="<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>">
                                                     </div>
                                                     <div class='form-group item-center'>
                                                         <button class='btn btn-danger btn-rounded' id="del-btn" type='submit'>Delete User Account</button>
@@ -154,8 +179,7 @@ $allowed = checkAccount(['admin']);
                                             </div>
 
                                         </div>
-                                    <?php endif ?>
-
+                                  
                                     <div class="tab-pane fade" id="tab-3">
                                         <h5 class="text-info m-b-20 m-t-20"><i class="fa fa-bullhorn"></i> Assign New Task</h5>
                                         <form id="taskform-create">
@@ -186,7 +210,7 @@ $allowed = checkAccount(['admin']);
                                                                                 ?>
 
                                                     </h3>
-                                                    <input class='form-control'  id="userId" type='hidden' name='assigned_to'
+                                                    <input class='form-control' id="userId" type='hidden' name='assigned_to'
                                                         value='<?php echo htmlspecialchars($_SESSION['userdetails']['id']) ?>'>
 
                                                 </div>
@@ -222,18 +246,24 @@ $allowed = checkAccount(['admin']);
                                             </div>
                                         </form>
                                     </div>
+                                    <?php endif ?>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <!-- END PAGE CONTENT-->
+
 
         </div>
-
+        <!-- END PAGE CONTENT-->
+        <?php
+        include '../includes/footer.php'
+        ?>
     </div>
+
+
 
     <!-- END THEME CONFIG PANEL-->
     <!-- BEGIN PAGA BACKDROPS-->
@@ -251,6 +281,7 @@ $allowed = checkAccount(['admin']);
         import alertFunction from '../assets/js/alertFunction.js';
         import handleFormMessage from '../assets/js/handleFormMessage.js';
         import fetchUserId from '../assets/js/fetchUserId.js';
+        import fetchData from '../assets/js/fetchData.js'
 
         document.addEventListener("DOMContentLoaded", () => {
 
@@ -258,7 +289,16 @@ $allowed = checkAccount(['admin']);
             const deleteForm = document.querySelector("#delete-account");
             const departmentSelect = document.querySelector('#department-select');
             const addTaskform = document.getElementById("taskform-create");
-            const userId=document.getElementById("userId")
+            const userId = document.getElementById("userId")
+            const totalTask = document.querySelector(".usertotaltask")
+            const pendingTask = document.querySelector(".userpendingtask")
+            const completedTask = document.querySelector(".usercompletedtask")
+            const lateTask = document.querySelector(".userlatetask")
+            const totalSalary = document.querySelector(".userTotalsalary")
+            const totalBaseSalary = document.querySelector(".userBasesalary")
+            const totalBonus = document.querySelector(".userbonus")
+            const totalDeductions = document.querySelector(".userdeductions")
+            const totalOvertime = document.querySelector(".userovertime")
 
             if (userprofileForm) {
                 userprofileForm.addEventListener("submit", async (e) => {
@@ -286,9 +326,9 @@ $allowed = checkAccount(['admin']);
             }
 
             (async () => {
-               
-                const id=userId.value
-                const departmentdata = await fetchUserId('../api/departments/process.fetchuserdepartment.php',id)
+
+                const id = userId.value
+                const departmentdata = await fetchUserId('../api/departments/process.fetchuserdepartment.php', id)
                 fillUserDepartment(departmentdata.departments)
             })()
 
@@ -299,7 +339,53 @@ $allowed = checkAccount(['admin']);
             }
 
 
+            const fetchUserTask = async () => {
+                const id = userId.value
+                const tasksData = await fetchData('../../api/dashboard/process.fetchusertask.php',
+                    null, null, null, id, null, null)
 
+                if (tasksData?.tasks) {
+                    totalTask.innerHTML = tasksData.total_user_tasks
+                    pendingTask.innerHTML = tasksData.taskstatuscount['pendingTotal']
+                    completedTask.innerHTML = tasksData.taskstatuscount['completedTotal']
+                    lateTask.innerHTML = tasksData.taskstatuscount['lateTotal']
+
+
+                } else {
+                    totalTask.innerHTML = '..'
+                    pendingTask.innerHTML = '..'
+                    completedTask.innerHTML = '..'
+                    lateTask.innerHTML = '..'
+
+
+                }
+            }
+
+            const fetchUserSalary = async () => {
+                const id = userId.value
+                const salaryData = await fetchData('../../api/dashboard/process.fetchonesalary.php',
+                    null, null, null, id, null, null)
+
+                if (salaryData.salary && salaryData.salary !== null) {
+                    totalBaseSalary.innerHTML = salaryData.salary.base_salary ?'GHS '+ salaryData.salary.base_salary : `<sup>N/A</sup>`
+                    totalSalary.innerHTML = salaryData.salary.total_salary ? 'GHS '+ salaryData.salary.total_salary : `<sup>N/A</sup>`
+                    totalBonus.innerHTML = salaryData.salary.bonus ? 'GHS '+ salaryData.salary.bonus : `<sup>N/A</sup>`
+                    totalDeductions.innerHTML = salaryData.salary.deductions ? 'GHS '+ salaryData.salary.deductions : `<sup>N/A</sup>`
+                    totalOvertime.innerHTML = salaryData.salary.overtime ? 'GHS '+ salaryData.salary.overtime : `<sup>N/A</sup>`
+
+
+                } else {
+                    totalBaseSalary.innerHTML = 'N/A'
+                    totalSalary.innerHTML = 'N/A'
+                    totalBonus.innerHTML = 'N/A'
+                    totalDeductions.innerHTML = 'N/A'
+
+
+                }
+            }
+
+            fetchUserTask()
+            fetchUserSalary()
 
 
 

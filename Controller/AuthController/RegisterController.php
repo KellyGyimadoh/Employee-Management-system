@@ -63,7 +63,7 @@ class RegisterController extends Register
         return strlen($phoneNumber) !== 10;
     }
 
-    private function checkAccountType() {}
+    
 
     private function password_mismatch()
     {
@@ -112,9 +112,7 @@ class RegisterController extends Register
         if ($this->inValidEmail()) {
             $this->errors['invalidemail'] = 'email is not valid';
         }
-        if ($this->inValidPhone()) {
-            $this->errors['invalidphone'] = 'Phone number not valid';
-        }
+       
 
         if (empty($this->errors)) {
             $result = $this->addNewUser(

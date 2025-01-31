@@ -4,8 +4,8 @@ include '../includes/head.php';
 require '../includes/sessions.php';
 ?>
 
-<body class="bg-silver-300" id="registerfront">
-    <div class="content mb-4">
+<body class="bg-silver-300 loginfront" >
+    <div class="content d-flex row  p-2 pb-5 loginblock ">
         <?php
         include '../includes/alert.php';
         ?>

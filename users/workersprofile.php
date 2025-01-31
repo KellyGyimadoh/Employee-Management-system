@@ -4,7 +4,8 @@ require '../includes/sessions.php';
 include '../includes/head.php';
 
 if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'] !== "admin") {
-    header('location:../auth/login.php');
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 
@@ -60,39 +61,40 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                     </div>
                     <div class="ibox-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>FirstName</th>
+                                        <th>LastName</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Account Registered</th>
+                                        <th>Account Type</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>FirstName</th>
+                                        <th>LastName</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Account Registered</th>
+                                        <th>Account Type</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody id="userTableBody">
 
-                        <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>FirstName</th>
-                                    <th>LastName</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Account Registered</th>
-                                    <th>Account Type</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>No</th>
-                                    <th>FirstName</th>
-                                    <th>LastName</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Account Registered</th>
-                                    <th>Account Type</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
-                            <tbody id="userTableBody">
 
-
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
@@ -125,7 +127,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
     <script src="../assets/js/users.js" type="module"></script>
-   
+
 </body>
 
 </html>

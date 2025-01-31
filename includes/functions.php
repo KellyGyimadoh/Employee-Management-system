@@ -142,21 +142,7 @@ function processImageBase($base64Image)
 
 function isloggedOut()
 {
-    //$_SESSION['logged_out'] = true;
-    // unset($_SESSION['csrf_token']);
-    // unset($_SESSION['csrf_token_time']);
-
-    // $_SESSION = [];
-
-
-    // //Destroy the session cookie
-    // if (ini_get("session.use_only_cookies")) {
-    //     $params = session_get_cookie_params();
-    //     setcookie(session_name(), '', time() - 42000,
-    //         $params["path"], $params["domain"],
-    //         $params["secure"], $params["httponly"]
-    //     );
-    // }
+    
     session_destroy();
     header('location:../../auth/login.php');
     exit;
@@ -240,10 +226,10 @@ function signUpForm()
 function userProfileForm()
 {
 
-    if (isset($_SESSION['userinfo']['userid'])) {
+    if (isset($_SESSION['userinfo']['id'])) {
         echo "  
           <div class='col-sm-6 form-group'>
-              <input class='form-control' type='hidden' name='userid' value='" . $_SESSION['userinfo']['userid'] . "'>
+              <input class='form-control' type='hidden' name='userid' value='" . $_SESSION['userinfo']['id'] . "'>
           </div>";
     } else {
         echo "  <div class='row'>

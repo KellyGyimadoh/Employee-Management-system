@@ -3,8 +3,12 @@ $title = "Pay Workers";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
-if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'] !== "admin") {
-    header('location:../auth/login.php');
+if (
+    !isloggedin() || !isset($_SESSION['accounttype']) ||
+    !in_array($_SESSION['accounttype'], ['admin']) || $_SESSION['userinfo']['status'] !== 1
+) {
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 

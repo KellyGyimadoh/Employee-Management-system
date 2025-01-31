@@ -34,19 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             handleFormMessage(resultData);
         }
       });
-      // Delegate event listener for inputs inside the dynamically created forms
-      taskTable.addEventListener("input", (e) => {
-          if (e.target && e.target.matches("input[id='bonus']")) {
-              const AddInput = e.target;
-              const addbutton = AddInput.closest("form").querySelector(".addbtn");
-              addbutton.innerText = `Add ${AddInput.value} To Salary`;
-          }
-          if (e.target && e.target.matches("input[id='deductions']")) {
-            const deductInput = e.target;
-            const addbutton = deductInput.closest("form").querySelector(".deductbtn");
-            addbutton.innerText = `Deduct ${deductInput.value} From Salary`;
-        }
-      })
+     
   
 
 
@@ -94,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <a class='btn btn-primary'
              href='../api/tasks/process.edittask.php?taskid=${task.id}'>Edit</a>
             </td>
-            <td>${paymentForm(task.id, task.status,task.assigned_to,task.due_date)}</td>
+            
             </tr>`
         ).join("")
     }
@@ -118,45 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return button;
     }
 
-    function paymentForm(id, status,userid=null,duedate=null) {
-        let taskform;
-        switch (status) {
-            case 1:
-                taskform = `
-                <form id='marktask-form-${id}' method='post'>
-                <input type='hidden' name='id' value='${id}'/>
-                 <input type="hidden" name="csrf_token" value='${getCsrfToken()}'>
-                 <input type="hidden" name="status" value='${status}'>
-                 <input type="hidden" name="due_date" value='${duedate}'>
-                <button  class='btn btn-primary'>Mark Complete</button>
-                </form>
-                `
-                break;
-            case 2:
-                taskform = `
-                <form id='salaryaddition-form-${id}'>
-                <input type='hidden' name='user_id' value='${userid}' />
-                    <input type="hidden" name="csrf_token" value='${getCsrfToken()}'>
-                    <input type="number" class='col-6 m-2' name="amount" id='bonus' value="0" step="0.01" min="0">
-                <button  class='btn btn-success addbtn'>Add<span id='addvalue'>0</span> To Salary</button>
-                </form>
-                `
-                break;
-            case 3:
-                taskform = `
-                <form id='salarydeduction-form-${id}'>
-                <input type='hidden' name='user_id' value='${userid}' />
-                    <input type="hidden" name="csrf_token" value='${getCsrfToken()}'>
-                    <input type="number" class='col-6 m-2' name="amount" id='deductions' value="0" step="0.01" min="0">
-                <button  class='btn btn-danger deductbtn'>Deduct <span id='deductvalue'>0</span> From Salary</button>
-                </form>
-                `
-                break;
-            default:
-                taskform = 'N/A'
-        }
-        return taskform;
-    }
+   
 
     const renderTasksPaginator = (totalpages, currentpage) => {
         paginator.innerHTML = "";

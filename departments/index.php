@@ -3,8 +3,12 @@ $title = "Manage Departments";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
-if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'] !== "admin") {
-    header('location:../auth/login.php');
+if (
+    !isloggedin() || !isset($_SESSION['accounttype']) ||
+    !in_array($_SESSION['accounttype'], [ 'admin']) || $_SESSION['userinfo']['status'] !== 1
+) {
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 
@@ -60,7 +64,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                     </div>
                     <div class="ibox-body">
-
+                        <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
@@ -93,6 +97,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
 
                             </tbody>
                         </table>
+                        </div>  
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

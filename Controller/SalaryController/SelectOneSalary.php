@@ -3,11 +3,11 @@ class SelectOneSalary extends Salary{
 
 private $salaryid;
 private $userid;
-    public function __construct($salaryid,$userid)
+    public function __construct($salaryid=null,$userid)
     {
         parent::__construct();
-        $salaryid=$this->sanitizeNumber($salaryid);
-        $this->salaryid=$this->sanitizeData($salaryid);
+        $salaryid=!empty($salaryid)?$this->sanitizeNumber($salaryid):'';
+        $this->salaryid=!empty($salaryid)?$this->sanitizeData($salaryid):'';
 
         $userid=$this->sanitizeNumber($userid);
         $this->userid=$this->sanitizeData($userid);
@@ -35,5 +35,10 @@ private $userid;
             
             header("Location: ../../salaries/edit.php");
         }
+    }
+
+    public function viewOneSalaryDetail(){
+        $result=$this->selectUserSalaryDetail($this->userid);
+        return $result ? $result : [];
     }
 }

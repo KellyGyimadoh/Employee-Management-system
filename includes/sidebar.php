@@ -8,7 +8,8 @@ $allowed = checkAccount(['admin']);
         <div class="admin-block d-flex">
             <div>
                 <img class="img-circle" src="<?php echo isset($_SESSION['userinfo']['image'])
-                                                    ? htmlspecialchars($_SESSION['userinfo']['image']) : '../assets/img/users/u3.jpg' ?>" width="45px" />
+                                                    ? htmlspecialchars($_SESSION['userinfo']['image']) 
+                                                    : '../assets/img/users/u3.jpg' ?>" width="45px" />
 
             </div>
             <div class="admin-info">
@@ -63,12 +64,15 @@ $allowed = checkAccount(['admin']);
                         <li>
                             <a href="../tasks/create.php">Create New Task</a>
                         </li>
+
+                        <li>
+                        <a href="../tasks/index.php">View All Tasks Records</a>
+                    </li>
                     <?php endif ?>
+                    
+                   
                     <li>
                         <a href="../tasks/today.php">View Todays Tasks</a>
-                    </li>
-                    <li>
-                        <a href="../tasks/index.php">View All Tasks Records</a>
                     </li>
 
 

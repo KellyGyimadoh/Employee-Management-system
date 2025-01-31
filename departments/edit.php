@@ -3,8 +3,12 @@ $title = isset($_SESSION['departmentdetails'])? htmlspecialchars($_SESSION['depa
 require '../includes/sessions.php';
 include '../includes/head.php';
 
-if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'] !== "admin") {
-    header('location:../auth/login.php');
+if (
+    !isloggedin() || !isset($_SESSION['accounttype']) ||
+    !in_array($_SESSION['accounttype'], [ 'admin','staff']) || $_SESSION['userinfo']['status'] !== 1
+) {
+    header("Location: ../error/error403.php");
+    session_destroy();
     die();
 }
 $allowed=checkAccount(['admin']);
@@ -83,6 +87,7 @@ $allowed=checkAccount(['admin']);
                                     </h3>
                                 </div>
                             </div>
+                            <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="example-table" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -110,6 +115,7 @@ $allowed=checkAccount(['admin']);
                                    
                                 </tbody>
                             </table>
+                            </div>  
                             <div class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                     <ul class="dptworkerpagination pagination">

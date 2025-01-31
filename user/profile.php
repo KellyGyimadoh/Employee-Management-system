@@ -75,67 +75,67 @@ if (isset($_SESSION['userinfo'])) {
                                     <li class="nav-item">
                                         <a class="nav-link" href="#tab-2" data-toggle="tab"><i class="ti-settings"></i> Settings</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#tab-3" data-toggle="tab"><i class="ti-announcement"></i> Feeds</a>
-                                    </li>
+
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-1">
                                         <div class="row">
                                             <div class="col-md-12" style="border-right: 1px solid #eee;">
                                                 <h5 class="text-info m-b-20 m-t-10"><i class="fa fa-bar-chart"></i> Month Statistics</h5>
-                                                <div class="h2 m-0">$12,400<sup>.60</sup></div>
-                                                <div><small>Month income</small></div>
+                                                <div class="h2 m-0 userBasesalary">$12,400<sup>.60</sup></div>
+                                                <div class="mb-3"><small>Monthly Base Salary</small></div>
+
+                                                <div class="h2 m-0 userTotalsalary">$12,400<sup>.60</sup></div>
+                                                <div><small>Monthly Total Salary</small></div>
                                                 <div class="m-t-20 m-b-20">
-                                                    <div class="h4 m-0">120</div>
-                                                    <div class="d-flex justify-content-between"><small>Month income</small>
+                                                    <div class="h4 m-0 userbonus">120</div>
+                                                    <div class="d-flex justify-content-between"><small>Month Bonuses</small>
                                                         <span class="text-success font-12"><i class="fa fa-level-up"></i> +24%</span>
                                                     </div>
                                                     <div class="progress m-t-5">
-                                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width:50%; height:5px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        <div class="progress-bar progress-bar-success" role="progressbar"
+                                                            style="width:50%; height:5px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                                 <div class="m-b-20">
-                                                    <div class="h4 m-0">86</div>
-                                                    <div class="d-flex justify-content-between"><small>Month income</small>
+                                                    <div class="h4 m-0 userdeductions">86</div>
+                                                    <div class="d-flex justify-content-between"><small>Month Deductions</small>
                                                         <span class="text-warning font-12"><i class="fa fa-level-down"></i> -12%</span>
                                                     </div>
                                                     <div class="progress m-t-5">
-                                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:50%; height:5px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:50%; height:5px;"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="m-b-20">
+                                                    <div class="h4 m-0 userovertime">86</div>
+                                                    <div class="d-flex justify-content-between"><small>Month Overtime</small>
+                                                        <span class="text-warning font-12"><i class="fa fa-level-down"></i> -12%</span>
+                                                    </div>
+                                                    <div class="progress m-t-5">
+                                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width:50%; height:5px;"
+                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                                 <ul class="list-group list-group-full list-group-divider">
-                                                    <li class="list-group-item">Projects
-                                                        <span class="pull-right color-orange">15</span>
+
+                                                    <li class="list-group-item">Total Tasks
+                                                        <span class="pull-right color-orange usertotaltask">148</span>
                                                     </li>
-                                                    <li class="list-group-item">Tasks
-                                                        <span class="pull-right color-orange">148</span>
+                                                    <li class="list-group-item">Task Pending
+                                                        <span class="pull-right color-orange userpendingtask">72</span>
                                                     </li>
-                                                    <li class="list-group-item">Articles
-                                                        <span class="pull-right color-orange">72</span>
+                                                    <li class="list-group-item">Task completed
+                                                        <span class="pull-right color-orange usercompletedtask">44</span>
                                                     </li>
-                                                    <li class="list-group-item">Friends
-                                                        <span class="pull-right color-orange">44</span>
+                                                    <li class="list-group-item">Task Completed Late
+                                                        <span class="pull-right color-orange userlatetask">44</span>
                                                     </li>
                                                 </ul>
                                             </div>
 
                                         </div>
-                                        <h4 class="text-info m-b-20 m-t-20"><i class="fa fa-shopping-basket"></i> Latest Orders</h4>
-                                        <table class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Order ID</th>
-                                                    <th>Customer</th>
-                                                    <th>Amount</th>
-                                                    <th>Status</th>
-                                                    <th width="91px">Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
 
-                                            </tbody>
-                                        </table>
                                     </div>
                                     <div class="tab-pane fade" id="tab-2">
                                         <form method="post" id="profile-form">
@@ -147,6 +147,9 @@ if (isset($_SESSION['userinfo'])) {
                                                 userProfileForm();
                                             }
                                             ?>
+                                            <div class="flex-box">
+                                                <span class="errormsg text-danger fs-5"></span>
+                                            </div>
                                         </form>
                                         <!-- passwordform -->
                                         <div class="mt-3">
@@ -156,7 +159,7 @@ if (isset($_SESSION['userinfo'])) {
                                                 <div class='col-sm-6 form-group'>
                                                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-                                                    <input class='form-control' type='hidden' name='userid' value="<?php echo htmlspecialchars($_SESSION['userinfo']['id']) ?>">
+                                                    <input class='form-control' id="userID" type='hidden' name='userid' value="<?php echo htmlspecialchars($_SESSION['userinfo']['id']) ?>">
                                                 </div>
                                                 <div class='col-sm-6 form-group'>
                                                     <label>Old Password</label>
@@ -177,26 +180,7 @@ if (isset($_SESSION['userinfo'])) {
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade" id="tab-3">
-                                        <h5 class="text-info m-b-20 m-t-20"><i class="fa fa-bullhorn"></i> Latest Feeds</h5>
-                                        <ul class="media-list media-list-divider m-0">
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-user font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading">New customer <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <div class="media-img"><i class="ti-info-alt font-18 text-muted"></i></div>
-                                                <div class="media-body">
-                                                    <div class="media-heading text-warning">Server Warning <small class="float-right text-muted">12:05</small></div>
-                                                    <div class="font-13">Lorem Ipsum is simply dummy text.</div>
-                                                </div>
-                                            </li>
 
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -226,12 +210,23 @@ if (isset($_SESSION['userinfo'])) {
     ?>
     <script type="module">
         import fetchAll from '../assets/js/fetchAll.js'
+        import fetchData from '../assets/js/fetchData.js'
         import alertFunction from '../assets/js/alertFunction.js'
         import handleFormMessage from '../assets/js/handleFormMessage.js';
         import processForm from '../assets/js/processForm.js';
         document.addEventListener("DOMContentLoaded", () => {
             const profileForm = document.querySelector("#profile-form");
             const passwordForm = document.querySelector("#password-form");
+            const userId = document.getElementById("userID")
+            const totalTask = document.querySelector(".usertotaltask")
+            const pendingTask = document.querySelector(".userpendingtask")
+            const completedTask = document.querySelector(".usercompletedtask")
+            const lateTask = document.querySelector(".userlatetask")
+            const totalSalary = document.querySelector(".userTotalsalary")
+            const totalBaseSalary = document.querySelector(".userBasesalary")
+            const totalBonus = document.querySelector(".userbonus")
+            const totalDeductions = document.querySelector(".userdeductions")
+            const totalOvertime = document.querySelector(".userovertime")
             if (profileForm) {
                 profileForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
@@ -246,6 +241,53 @@ if (isset($_SESSION['userinfo'])) {
                     handleFormMessage(resultData);
                 });
             }
+            const fetchUserTask = async () => {
+                const id = userId.value
+                const tasksData = await fetchData('../../api/dashboard/process.fetchusertask.php',
+                    null, null, null, id, null, null)
+
+                if (tasksData?.tasks) {
+                    totalTask.innerHTML = tasksData.total_user_tasks
+                    pendingTask.innerHTML = tasksData.taskstatuscount['pendingTotal']
+                    completedTask.innerHTML = tasksData.taskstatuscount['completedTotal']
+                    lateTask.innerHTML = tasksData.taskstatuscount['lateTotal']
+
+
+                } else {
+                    totalTask.innerHTML = '..'
+                    pendingTask.innerHTML = '..'
+                    completedTask.innerHTML = '..'
+                    lateTask.innerHTML = '..'
+
+
+                }
+            }
+
+            const fetchUserSalary = async () => {
+                const id = userId.value
+                const salaryData = await fetchData('../../api/dashboard/process.fetchonesalary.php',
+                    null, null, null, id, null, null)
+
+                if (salaryData.salary && salaryData.salary !== null) {
+                    totalBaseSalary.innerHTML = salaryData.salary.base_salary ? 'GHS '+ salaryData.salary.base_salary : `<sup>N/A</sup>`
+                    totalSalary.innerHTML = salaryData.salary.total_salary ? 'GHS '+ salaryData.salary.total_salary : `<sup>N/A</sup>`
+                    totalBonus.innerHTML = salaryData.salary.bonus ? 'GHS '+ salaryData.salary.bonus : `<sup>N/A</sup>`
+                    totalDeductions.innerHTML = salaryData.salary.deductions ? 'GHS '+ salaryData.salary.deductions : `<sup>N/A</sup>`
+                    totalOvertime.innerHTML = salaryData.salary.overtime ? 'GHS '+ salaryData.salary.overtime : `<sup>N/A</sup>`
+
+
+                } else {
+                    totalBaseSalary.innerHTML = 'N/A'
+                    totalSalary.innerHTML = 'N/A'
+                    totalBonus.innerHTML = 'N/A'
+                    totalDeductions.innerHTML = 'N/A'
+
+
+                }
+            }
+
+            fetchUserTask()
+            fetchUserSalary()
 
         })
     </script>

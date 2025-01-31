@@ -98,9 +98,7 @@ class UpdateController extends Register
         if ($this->inValidEmail()) {
             $this->errors['invalidemail'] = 'email is not valid';
         }
-        if ($this->inValidPhone()) {
-            $this->errors['invalidphone'] = 'Phone number not valid';
-        }
+        
 
         if (empty($this->errors)) {
             $result = $this->updateUser(
