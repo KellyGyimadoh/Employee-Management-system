@@ -29,18 +29,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //attendance
 
-    const totalAttendanceToday=document.querySelector(".attendancetotalnumber")
-    const totalPresentToday=document.querySelector(".userspresent")
-    const totalAbsentToday=document.querySelector(".usersabsent")
-    const totalLateToday=document.querySelector(".userslate")
+    const totalAttendanceToday = document.querySelector(".attendancetotalnumber")
+    const totalPresentToday = document.querySelector(".userspresent")
+    const totalAbsentToday = document.querySelector(".usersabsent")
+    const totalLateToday = document.querySelector(".userslate")
 
     //users
 
-    const totalUsers=document.querySelector(".totalusers")
-    const totalStaff=document.querySelector(".totalstaff")
-    const totalAdmin=document.querySelector(".totaladmin")
-    const totalActiveUsers=document.querySelector(".totalactiveusers")
-    const totalSuspendedUsers=document.querySelector(".totalinactiveusers")
+    const totalUsers = document.querySelector(".totalusers")
+    const totalStaff = document.querySelector(".totalstaff")
+    const totalAdmin = document.querySelector(".totaladmin")
+    const totalActiveUsers = document.querySelector(".totalactiveusers")
+    const totalSuspendedUsers = document.querySelector(".totalinactiveusers")
+
+    //leave request
+    const totalRequest = document.querySelector(".totalrequestnumber");
+    const pendingRequest = document.querySelector(".pendingrequest");
+    const approvedRequest = document.querySelector(".approvedrequest");
+    const rejectedRequest = document.querySelector(".rejectedrequest");
+//all users leave
+    const userstotalRequest = document.querySelector(".userstotalrequestnumber");
+    const userspendingRequest = document.querySelector(".userspendingrequest");
+    const usersapprovedRequest = document.querySelector(".usersapprovedrequest");
+    const usersrejectedRequest = document.querySelector(".usersrejectedrequest");
+
+
     // Fetch and render data
     const loadTasks = async () => {
         const tasksData = await fetchData('../../api/dashboard/process.fetchusertask.php',
@@ -75,16 +88,16 @@ document.addEventListener("DOMContentLoaded", () => {
             null, null, null, userId, null, null)
 
         if (attendanceData?.attendances) {
-           totalAttendanceToday.innerHTML=attendanceData.total_today
-           totalPresentToday.innerHTML=attendanceData.attendances.total_present
-           totalAbsentToday.innerHTML=attendanceData.attendances.total_absent
-           totalLateToday.innerHTML=attendanceData.attendances.total_late
+            totalAttendanceToday.innerHTML = attendanceData.total_today
+            totalPresentToday.innerHTML = attendanceData.attendances.total_present
+            totalAbsentToday.innerHTML = attendanceData.attendances.total_absent
+            totalLateToday.innerHTML = attendanceData.attendances.total_late
 
         } else {
-            totalAttendanceToday.innerHTML='loading..'
-            totalPresentToday.innerHTML='loading..'
-            totalAbsentToday.innerHTML='loading..'
-            totalLateToday.innerHTML='loading..'
+            totalAttendanceToday.innerHTML = 'loading..'
+            totalPresentToday.innerHTML = 'loading..'
+            totalAbsentToday.innerHTML = 'loading..'
+            totalLateToday.innerHTML = 'loading..'
         }
     }
 
@@ -93,45 +106,82 @@ document.addEventListener("DOMContentLoaded", () => {
             null, null, null, userId, null, null)
 
         if (userData?.users) {
-           totalUsers.innerHTML=userData.total_users
-           totalStaff.innerHTML=userData.users['staff_total']
-           totalAdmin.innerHTML=userData.users['admin_total']
-           totalActiveUsers.innerHTML=userData.users['active_total']
-           totalSuspendedUsers.innerHTML=userData.users['inactive_total']
-          
-          
+            totalUsers.innerHTML = userData.total_users
+            totalStaff.innerHTML = userData.users['staff_total']
+            totalAdmin.innerHTML = userData.users['admin_total']
+            totalActiveUsers.innerHTML = userData.users['active_total']
+            totalSuspendedUsers.innerHTML = userData.users['inactive_total']
+
+
 
         } else {
-            totalUsers.innerHTML='loading..'
-            totalStaff.innerHTML='loading..'
-            totalAdmin.innerHTML='loading..'
-            
+            totalUsers.innerHTML = 'loading..'
+            totalStaff.innerHTML = 'loading..'
+            totalAdmin.innerHTML = 'loading..'
+
+        }
+    }
+
+    const loadMyLeaveRequest=async()=>{
+        const userLeaveData = await fetchData('../../api/dashboard/process.fetchoneleave.php', null,
+            null, null, userId, null)
+        if (userLeaveData) {
+
+
+            totalRequest.innerHTML = userLeaveData.total_request;
+            pendingRequest.innerHTML = userLeaveData.total_pending;
+            rejectedRequest.innerHTML = userLeaveData.total_rejected
+            approvedRequest.innerHTML = userLeaveData.total_approved
+        } else {
+           
+            totalRequest.innerHTML = '...'
+            pendingRequest.innerHTML = '...'
+            rejectedRequest.innerHTML = '...'
+            approvedRequest.innerHTML = '...'
+        }
+    }
+    const loadUsersLeaveRequest=async()=>{
+        const userLeaveData = await fetchData('../../api/dashboard/process.fetchalluserleave.php', null,
+            null, null, null, null)
+        if (userLeaveData) {
+
+
+            userstotalRequest.innerHTML = userLeaveData.total_request;
+            userspendingRequest.innerHTML = userLeaveData.total_pending;
+            usersrejectedRequest.innerHTML = userLeaveData.total_rejected
+            usersapprovedRequest.innerHTML = userLeaveData.total_approved
+        } else {
+           
+            userstotalRequest.innerHTML = '...'
+            userspendingRequest.innerHTML = '...'
+            usersrejectedRequest.innerHTML = '...'
+            usersapprovedRequest.innerHTML = '...'
         }
     }
 
 
-
     (async () => {
+       
         const salariesData = await fetchData('../../api/dashboard/process.fetchsalaries.php',
             null, null, null, userId, null, null)
         if (salariesData?.salaries) {
             renderSalaryTable(salariesData.salaries)
-         }
+        }
 
-         const departmentData = await fetchData('../../api/dashboard/process.fetchdepartments.php',
+        const departmentData = await fetchData('../../api/dashboard/process.fetchdepartments.php',
             null, null, null, userId, null, null)
         if (departmentData?.departments) {
             renderDepartmentTable(departmentData?.departments)
-             departmentTotal.innerHTML=`${departmentData.departments_total}`
-         }
+            departmentTotal.innerHTML = `${departmentData.departments_total}`
+        }
 
-        
+
     })()
 
 
     const renderSalaryTable = (salary) => {
-        salaryTotal.innerHTML=`GHS ${salary.total_salary}`
-        salaryTable.innerHTML = 
+        salaryTotal.innerHTML = `GHS ${salary.total_salary}`
+        salaryTable.innerHTML =
             `<tr>
                 <td>${salary.base_salary_total}</td>
                 <td>${salary.bonus_total}</td>
@@ -144,8 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const renderDepartmentTable = (departments) => {
-       
-        departmentTable.innerHTML = 
+
+        departmentTable.innerHTML =
             `<tr>
                 <td><span class='badge badge-info'>${departments.departments_total}</span></td>
                 <td><span class='badge badge-warning'>${departments.has_head_total}</span></td>
@@ -158,6 +208,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTasks()
     loadAttendance()
     loadUserData()
+    loadMyLeaveRequest()
+    loadUsersLeaveRequest()
 
 
 })

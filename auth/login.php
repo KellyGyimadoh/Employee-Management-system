@@ -9,7 +9,7 @@ include '../includes/sessions.php';
    <?php
    include '../includes/alert.php';
    ?>
-    <div class="content">
+    <div class="content ">
         <div class="brand">
             <a class="link text-warning" href="login.php">INFO SPACE TECH <i class="ti-joomla"></i></a>
         </div>

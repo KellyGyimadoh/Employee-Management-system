@@ -1,11 +1,14 @@
 .alertsuccess{
    background-color: rgb(140, 229, 140);
-   width: auto;
+   width: auto !important;
    justify-self: end;
    justify-items: auto;
    border-color: green !important;
    align-items: flex-start;
-    height: 30%;
+    height: 40% !important;
+   margin: 10px;
+    z-index: 100;
+    border-radius: 5px !important;
   
 }
 
@@ -14,19 +17,22 @@
 }
 
 .alertmessage{
-    font-size: 13px;
+    font-size: 15px !important;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: inline-flex;
 }
 
 .alertdanger{
     background-color: rgba(248, 29, 29, 0.349);
-    width: auto;
-    
+    width: auto !important;
+    border-radius: 5px !important;
     justify-self: end;
     justify-items: auto;
     border-color:rgb(253, 123, 114) !important;
     align-items: flex-start;
+    height: 40% !important;
+    margin: 10px;
+    z-index: 100;
  
  }
 
@@ -77,3 +83,4 @@ background-image: url('../img/blog/storm.jpg');
 #loginfront{
     background-image: url('../img/blog/storm.jpg');
 }
+

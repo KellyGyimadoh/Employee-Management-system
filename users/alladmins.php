@@ -123,7 +123,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
     include '../includes/scripts.php'
     ?>
     <!-- PAGE LEVEL SCRIPTS-->
-    <script src="../assets/js/allworkers.js" type="module"></script>
+    <script src="../assets/js/alladmins.js" type="module"></script>
    
 </body>
 

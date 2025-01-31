@@ -29,7 +29,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                 <div class="row">
 
                     <div class="col-lg-3 col-md-6">
-                        <div class="ibox bg-success color-white widget-stat">
+                        <div class="ibox bg-info color-white widget-stat">
                             <div class="ibox-body">
                                 <h2 class="m-b-5 font-strong totalworktasks">201</h2>
                                 <div class="m-b-5">TOTAL WORK TASKS</div>
@@ -69,7 +69,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
 
                     <!--users own task-->
                     <div class="col-lg-3 col-md-6">
-                        <div class="ibox bg-success color-white widget-stat">
+                        <div class="ibox bg-info color-white widget-stat">
                             <div class="ibox-body">
                                 <h2 class="m-b-5 font-strong tasktotalnumber">201</h2>
                                 <div class="m-b-5">MY TOTAL TASKS</div>
@@ -148,6 +148,83 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                             </div>
                         </div>
                     </div>
+                    <!--personal leave request -->
+                    <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-info color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong totalrequestnumber">201</h2>
+                            <div class="m-b-5">TOTAL LEAVES REQUESTED</div>
+                            <i class="ti-email widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-warning color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong pendingrequest">1250</h2>
+                            <div class="m-b-5">MY REQUEST PENDING</div><i class="ti-bar-chart widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-success color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong approvedrequest">1250</h2>
+                            <div class="m-b-5">MY REQUEST APPROVED</div><i class="ti-check-box widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-danger color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong rejectedrequest">1250</h2>
+                            <div class="m-b-5">MY REQUEST REJECTED</div><i class="ti-face-sad widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                    <!-- all user leave -->
+
+                    <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-info color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong userstotalrequestnumber">201</h2>
+                            <div class="m-b-5">EMPLOYEES TOTAL LEAVES REQUESTED</div>
+                            <i class="ti-email widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-warning color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong userspendingrequest">1250</h2>
+                            <div class="m-b-5">TOTAL REQUEST PENDING</div><i class="ti-bar-chart widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-success color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong usersapprovedrequest">1250</h2>
+                            <div class="m-b-5">TOTAL REQUEST APPROVED</div><i class="ti-check-box widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="ibox bg-danger color-white widget-stat">
+                        <div class="ibox-body">
+                            <h2 class="m-b-5 font-strong usersrejectedrequest">1250</h2>
+                            <div class="m-b-5">TOTAL REQUEST REJECTED</div><i class="ti-face-sad widget-stat-icon"></i>
+                            
+                        </div>
+                    </div>
+                </div>
 
                     <div class="row  dptcard p-3 ">
                         <!-- salaries -->
@@ -233,7 +310,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                 </div>
             </div>
             <div class="row mt-3">
-                <div class="ibox col-4 m-2 p-2">
+                <div class="ibox col-lg-4 col-md-4 col-sm-12 m-2 p-2">
                     <h5 class="ibox-head">Total Workers| <span id="workertype"></span></h5>
 
                     <div class="d-flex align-items-center">
@@ -248,7 +325,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                     </div>
                 </div>
-                <div class="ibox col-3 m-2 p-2">
+                <div class="ibox col-lg-3 col-md-3 col-sm-12 m-2 p-2">
                     <h5 class="ibox-head">Total Staff| <span id="workertype"></span></h5>
 
                     <div class="d-flex align-items-center">
@@ -263,7 +340,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                     </div>
                 </div>
-                <div class="ibox col-4 m-2 p-2">
+                <div class="ibox col-lg-4 col-md-4 col-sm-12 m-2 p-2">
                     <h5 class="ibox-head">Total Administrators| <span id="workertype"></span></h5>
 
                     <div class="d-flex align-items-center">
@@ -278,7 +355,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                     </div>
                 </div>
-                <div class="ibox col-4 m-2 p-2 bg-info text-white">
+                <div class="ibox col-lg-4 col-md-4 col-sm-12 m-2 p-2 bg-info text-white">
                     <h5 class="ibox-head">Total Users Active| <span id="workertype"></span></h5>
 
                     <div class="d-flex align-items-center">
@@ -293,7 +370,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </div>
                     </div>
                 </div>
-                <div class="ibox col-4 m-2 p-2 bg-danger text-white">
+                <div class="ibox col-lg-4 col-md-4 col-sm-12 m-2 p-2 bg-danger text-white">
                     <h5 class="ibox-head">Total Users Suspended| <span id="workertype"></span></h5>
 
                     <div class="d-flex align-items-center">

@@ -1,3 +1,3 @@
-<div class=" m-3 border border-primary p-3 alertbox  rounded hidden ">
-                <span class="alertmessage"></span>
-            </div>
+<div class=" border border-primary p-5 alertbox  rounded hidden ">
+   <div><span class="alertmessage p-3 m-1"></span></div>    
+</div>

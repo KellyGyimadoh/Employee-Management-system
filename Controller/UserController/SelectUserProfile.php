@@ -53,4 +53,13 @@ private $account_type=null;
     public function AllUsersSummary(){
         return $this->usersCountSummary()?:$this->usersCountSummary();
     }
+
+    public function getAllUsersDetails(){
+        $result=$this->allUsersSalaryAndProfileDetails($this->limit,$this->offset,
+        $this->search,$this->account_type);
+        if($result){
+            return $result;
+        }
+        return [];
+    }
 }

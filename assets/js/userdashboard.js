@@ -36,6 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalUsers=document.querySelector(".totalusers")
     const totalStaff=document.querySelector(".totalstaff")
     const totalAdmin=document.querySelector(".totaladmin")
+
+    //userleave
+    const totalRequest=document.querySelector(".totalrequestnumber");
+    const pendingRequest=document.querySelector(".pendingrequest");
+    const approvedRequest=document.querySelector(".approvedrequest");
+    const rejectedRequest=document.querySelector(".rejectedrequest");
+     
+ 
     // Fetch and render data
     const loadTasks = async () => {
         const tasksData = await fetchData('../../api/dashboard/process.fetchusertask.php',
@@ -105,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     (async () => {
-       
+        
 
          const departmentData = await fetchData('../../api/dashboard/process.fetchdepartments.php',
             null, null, null, userId, null, null)
@@ -117,6 +125,24 @@ document.addEventListener("DOMContentLoaded", () => {
         
     })()
 
+  const loadMyLeaveRequest=async()=>{
+        const userLeaveData = await fetchData('../../api/dashboard/process.fetchoneleave.php', null,
+            null, null, userId, null)
+        if (userLeaveData) {
+
+
+            totalRequest.innerHTML = userLeaveData.total_request;
+            pendingRequest.innerHTML = userLeaveData.total_pending;
+            rejectedRequest.innerHTML = userLeaveData.total_rejected
+            approvedRequest.innerHTML = userLeaveData.total_approved
+        } else {
+           
+            totalRequest.innerHTML = '...'
+            pendingRequest.innerHTML = '...'
+            rejectedRequest.innerHTML = '...'
+            approvedRequest.innerHTML = '...'
+        }
+    }
 
    
 
@@ -135,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTasks()
     loadAttendance()
     loadUserData()
+    loadMyLeaveRequest()
 
 
 })

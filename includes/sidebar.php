@@ -87,10 +87,10 @@ $allowed = checkAccount(['admin']);
                             <a href="../users/allworkers.php">All Workers</a>
                         </li>
                         <li>
-                            <a href="colors.html">All Administrators</a>
+                            <a href="../users/alladmins.php">All Administrators</a>
                         </li>
                         <li>
-                            <a href="colors.html">All Staffs</a>
+                            <a href="../users/allstaff.php">All Staffs</a>
                         </li>
 
 

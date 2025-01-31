@@ -161,4 +161,60 @@ protected function allUsers(){
     }
 }
 
+protected function allUsersSalaryAndProfileDetails($limit,$offset,$search=null,$accountType=null){
+    try {
+        $conn=parent::connect_to_database();
+        $sql="SELECT users.id AS userID,users.firstname,users.lastname,
+        users.email,users.status,users.account_type,users.phone,users.created_at,
+        salaries.total_salary,
+         GROUP_CONCAT(DISTINCT CONCAT(deptlist.name) SEPARATOR ', ') AS user_departments
+        FROM users
+        LEFT JOIN users_departments ON
+        users.id=users_departments.user_id
+        LEFT JOIN departments ON
+        users_departments.department_id=departments.id
+        LEFT JOIN departments AS deptlist
+         ON users_departments.department_id = deptlist.id
+        LEFT JOIN salaries ON
+        users.id=salaries.user_id
+        ";
+       // Add WHERE condition for search or account type
+       $conditions = [];
+       if (!empty($search)) {
+           $conditions[] = " (users.firstname LIKE :search OR users.lastname LIKE :search OR users.email LIKE :search) ";
+       }
+       if (!empty($accountType)) {
+           $conditions[] = " users.account_type =:account_type ";
+       }
+
+       // Append conditions to SQL
+       if (count($conditions) > 0) {
+           $sql .= " WHERE " . implode(" AND ", $conditions);
+       }
+
+       // Add LIMIT and OFFSET for pagination
+       $sql .= " GROUP BY users.id
+       LIMIT :limit OFFSET :offset";
+        $stmt=$conn->prepare($sql);
+        
+        // Bind parameters
+        if (!empty($search)) {
+            $stmt->bindValue(':search', "%$search%");
+        }
+        if (!empty($accountType)) {
+            $stmt->bindValue(':account_type', $accountType);
+        }
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        // Execute query
+        $stmt->execute();
+
+        // Fetch all results
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die('error fetching data'.$e->getMessage());
+    }
+}
+
 }
