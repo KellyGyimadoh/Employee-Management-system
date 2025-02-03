@@ -21,8 +21,8 @@ try {
 
     if ($result['count'] == 0) {
         // Populate the attendance table for all users
-        $insertQuery = "INSERT INTO attendance (user_id, date, status) 
-                        SELECT id, :date, 1 FROM users"; // Default status is 1 (Absent)
+        $insertQuery = "INSERT INTO attendance (user_id, date) 
+                        SELECT id, :date FROM users"; // Default status is 1 (Absent)
         $stmt = $conn->prepare($insertQuery);
         $stmt->bindParam(':date', $currentDate);
 

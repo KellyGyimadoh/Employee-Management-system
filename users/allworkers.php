@@ -35,7 +35,12 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                 <div class="ibox">
                     <div class="ibox-head">
                         <div class="ibox-title">Employees Profile</div>
+                        <div class='row d-flex justify-content-end'>
+                        <a href="../api/userview/process.exportallusers.php" 
+                        class='btn btn-dark btn-rounded'>Download All Workers Csv</a>
+                                                </div>
                     </div>
+                    
                     <div class="row m-2 d-flex justify-content-between">
                         <div class="col-md-6 text-nowrap">
                             <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
