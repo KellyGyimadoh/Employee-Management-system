@@ -1,6 +1,73 @@
 <?php
 class Attendance extends Dbconnection
 {
+    protected function InsertAttendance(){
+        try {
+            // Set the current date
+            $currentDate = date('Y-m-d');
+        
+            // Create a database connection
+          
+            $conn = parent::connect_to_database();
+        
+            // Check if the attendance table is already populated for today
+            $query = "SELECT COUNT(*) AS count FROM attendance WHERE date = :date";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':date', $currentDate);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC); // Use fetch instead of fetchAll for a single row
+        
+            if ($result['count'] == 0) {
+                // Populate the attendance table for all users
+                $insertQuery = "INSERT INTO attendance (user_id, date) 
+                                SELECT id, :date FROM users"; // Default status is 1 (Absent)
+                $stmt = $conn->prepare($insertQuery);
+                $stmt->bindParam(':date', $currentDate);
+        
+                if ($stmt->execute()) {
+                    return ['success'=>true,'message'=>'Workers attendance entered for today'];
+                } else {
+                    return ['success'=>false,'message'=>'Failed to insert Workers attendance entered for today'];
+                }
+            } else {
+                return ['success'=>false,'message'=>'Workers attendance already entered for today'];
+            }
+        
+        } catch (PDOException $e) {
+            // Handle database-related exceptions
+            echo "Database error: " . $e->getMessage() . "\n";
+        } catch (Exception $e) {
+            // Handle other exceptions
+            echo "General error: " . $e->getMessage() . "\n";
+        }
+    }
+    protected function checkoutForToday($userid,$checkoutTime,$currentDate)
+    {
+       
+        try {
+
+            $conn = parent::connect_to_database();
+            $sql = "UPDATE attendance SET
+               checkout_time =:checkoutTime 
+              WHERE user_id =:user_id AND date =:date";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":user_id", $userid);
+            $stmt->bindParam(":checkoutTime", $checkoutTime);
+            $stmt->bindParam(":date", $currentDate);
+
+
+            if ($stmt->execute()) {
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            die('error updating' . $e->getMessage());
+        } finally {
+            $stmt->closeCursor();
+        }
+    }
     protected function updateAttendance($userid, $checkinTime, $currentDate, $status)
     {
         try {
@@ -28,7 +95,24 @@ class Attendance extends Dbconnection
             $stmt->closeCursor();
         }
     }
+    protected function checkUserCheckedOutToday($userid,$currentDate)
+    {
+        try {
 
+            $conn = parent::connect_to_database();
+            $sql = "SELECT checkout_time from attendance WHERE user_id=:userid AND date=:date";
+            $stmt = $conn->prepare($sql);
+           
+            $stmt->bindParam(":userid", $userid);
+            $stmt->bindParam(":date", $currentDate);
+            $stmt->execute();
+            return $stmt->fetchColumn() > 0; 
+        } catch (PDOException $e) {
+            die('error updating' . $e->getMessage());
+        } finally {
+            $stmt->closeCursor();
+        }
+    }
     protected function updateUserAttendance($userid, $checkinTime, $date, $status,$attendanceid)
     {
         try {
@@ -157,6 +241,7 @@ class Attendance extends Dbconnection
            attendance.date,
            attendance.user_id,
            attendance.checkin_time,
+           attendance.checkout_time,
             users.firstname,
             users.lastname
         FROM attendance
@@ -236,6 +321,7 @@ class Attendance extends Dbconnection
            attendance.date,
            attendance.user_id,
            attendance.checkin_time,
+           attendance.checkout_time,
             users.firstname,
             users.lastname
         FROM attendance
@@ -316,6 +402,7 @@ class Attendance extends Dbconnection
                     attendance.date,
                     attendance.user_id,
                     attendance.checkin_time,
+                    attendance.checkout_time,
                     users.firstname,
                     users.lastname
                     FROM attendance

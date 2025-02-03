@@ -81,6 +81,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                     <th>Employee Name</th>
                                     <th>Time Checked In</th>
                                     <th>Date</th>
+                                    <th>Time Checked Out</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                     <th>Mark User</th>
@@ -93,6 +94,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                                     <th>Employee Name</th>
                                     <th>Time Checked In</th>
                                     <th>Date</th>
+                                    <th>Time Checked Out</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                     <th>Mark User</th>

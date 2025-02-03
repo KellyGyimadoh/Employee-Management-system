@@ -82,6 +82,7 @@ if (
                                     <th>Employee Name</th>
                                     <th>Time Checked In</th>
                                     <th>Date</th>
+                                    <th>Time Checked Out</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                     <th>Mark User</th>
@@ -94,6 +95,7 @@ if (
                                     <th>Employee Name</th>
                                     <th>Time Checked In</th>
                                     <th>Date</th>
+                                    <th>Time Checked Out</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                     <th>Mark User</th>

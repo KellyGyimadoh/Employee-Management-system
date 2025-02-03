@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <td>${attendance.firstname + ' ' + attendance.lastname}</td>
             <td>${attendance.checkin_time ? attendance.checkin_time : 'Not Checked In'}</td>
             <td>${attendance.date ? attendance.date : "N/A"}</td>
+             <td>${attendance.checkout_time ? attendance.checkout_time : 'Not Checked Out'}</td>
             <td>${checkStatus(attendance.status)}</td>
             <td>
             <a class='btn btn-primary'

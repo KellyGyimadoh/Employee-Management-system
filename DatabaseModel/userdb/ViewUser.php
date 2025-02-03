@@ -216,5 +216,68 @@ protected function allUsersSalaryAndProfileDetails($limit,$offset,$search=null,$
         die('error fetching data'.$e->getMessage());
     }
 }
+protected function OneUsersSalaryAndProfileDetailsForCsv($userid){
+    try {
+        $conn=parent::connect_to_database();
+        $sql="SELECT users.id,users.firstname,users.lastname,
+        users.email,users.status,users.phone,users.created_at,
+        salaries.total_salary,salaries.bonus,salaries.deductions,
+         GROUP_CONCAT(DISTINCT CONCAT(deptlist.name) SEPARATOR ', ') AS user_departments
+        FROM users
+        LEFT JOIN users_departments ON
+        users.id=users_departments.user_id
+        LEFT JOIN departments ON
+        users_departments.department_id=departments.id
+        LEFT JOIN departments AS deptlist
+         ON users_departments.department_id = deptlist.id
+        LEFT JOIN salaries ON
+        users.id=salaries.user_id
+        WHERE users.id=:userid
+        ";
+      
+        $stmt=$conn->prepare($sql);
+        $stmt->bindValue(':userid', (int)$userid, PDO::PARAM_INT);
+       
+        // Execute query
+        $stmt->execute();
+
+        // Fetch all results
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die('error fetching data'.$e->getMessage());
+    }
+}
+
+protected function AllUsersSalaryAndProfileDetailsForCsv(){
+    try {
+        $conn=parent::connect_to_database();
+        $sql="SELECT users.id,users.firstname,users.lastname,
+        users.email,users.phone,users.created_at,
+        salaries.total_salary,salaries.bonus,salaries.deductions,
+         GROUP_CONCAT(DISTINCT deptlist.name ORDER BY deptlist.name ASC SEPARATOR ', ') AS user_departments
+        FROM users
+        LEFT JOIN users_departments ON
+        users.id=users_departments.user_id
+        LEFT JOIN departments ON
+        users_departments.department_id=departments.id
+        LEFT JOIN departments AS deptlist
+         ON users_departments.department_id = deptlist.id
+        LEFT JOIN salaries ON
+        users.id=salaries.user_id
+        GROUP BY users.id, users.firstname, users.lastname, users.email, users.phone, users.created_at,
+        salaries.total_salary, salaries.bonus, salaries.deductions
+        ";
+      
+        $stmt=$conn->prepare($sql);
+    
+        // Execute query
+        $stmt->execute();
+
+        // Fetch all results
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die('error fetching data'.$e->getMessage());
+    }
+}
 
 }
