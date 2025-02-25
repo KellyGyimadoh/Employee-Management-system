@@ -11,7 +11,9 @@ if (
     session_destroy();
     die();
 }
-
+$allowed = checkAccount(['admin']);
+$nextMonth = date('M-Y', strtotime('first day of +1 month'));
+        
 ?>
 
 <body class="fixed-navbar">
@@ -37,6 +39,19 @@ if (
                     <li class="breadcrumb-item">WORKER PAYMENT</li>
                 </ol>
             </div>
+            <?php if ($allowed): ?>
+                <div class="d-flex justify-content-end">
+                    <form id="add-payrollrecord">
+                        <input type="hidden" id="user_id" name="id" class="form-control"
+                            value="<?php echo htmlspecialchars($_SESSION['userinfo']['id']); ?>">
+                        <input type="hidden" name="csrf_token"
+                            value="<?php echo htmlspecialchars($_SESSION['csrf_token']) ?>">
+
+                        <button class="btn btn-success">Insert Payroll For &nbsp;<?php echo htmlspecialchars($nextMonth) ?></button>
+
+                    </form>
+                </div>
+            <?php endif ?>
             <div class="page-content fade-in-up">
                 <div class="ibox">
                     <div class="ibox-head">
@@ -128,6 +143,7 @@ if (
         document.addEventListener("DOMContentLoaded", () => {
             const userSelect = document.getElementById("user-select")
             const addPayrollform = document.getElementById("payrollform-create")
+            const insertPayrollRecordform = document.getElementById("add-payrollrecord")
             //const errorinfomsg=document.querySelector('.errormsg')
 
 
@@ -135,6 +151,14 @@ if (
                 addPayrollform.addEventListener("submit", async (e) => {
                     e.preventDefault();
                     const resultData = await processForm(addPayrollform, '../api/payroll/process.addpayroll.php');
+                    handleFormMessage(resultData);
+                });
+            }
+
+            if (insertPayrollRecordform) {
+                insertPayrollRecordform.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const resultData = await processForm(insertPayrollRecordform, '../api/payroll/process.insertpayroll.php');
                     handleFormMessage(resultData);
                 });
             }

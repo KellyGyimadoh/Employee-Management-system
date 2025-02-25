@@ -166,7 +166,7 @@ $allowed = checkAccount(['admin']);
                         <span class="nav-label">Manage Payroll</span><i class="fa fa-angle-left arrow mx-6"></i></a>
                     <ul class="nav-2-level collapse multi-collapse" id="payrollcollapse">
                         <li>
-                            <a href="../payroll/create.php">Pay Worker</a>
+                            <a href="../payroll/create.php">Pay Worker/Insert Payroll</a>
                         </li>
                         <li>
                             <a href="../payroll/recent.php">View Recent Payroll</a>
