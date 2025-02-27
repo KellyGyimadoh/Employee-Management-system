@@ -1,5 +1,5 @@
 <?php
-$title = "All Attendance Record";
+$title = " Attendance Today";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
@@ -29,7 +29,8 @@ if (
             ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
-                <h1 class="page-title">EMPLOYEES ATTENDANCE</h1>
+                <h1 class="page-title">EMPLOYEES ATTENDANCE TODAY</h1>
+                <h1 class="page-title"><?php echo htmlspecialchars(date('Y-M-d'))?></h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="allworkers.php"><i class="la la-home font-20"></i></a>

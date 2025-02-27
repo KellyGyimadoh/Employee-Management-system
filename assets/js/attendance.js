@@ -129,25 +129,53 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    const renderAttendancePaginator = (totalpages, currentpage) => {
-        paginator.innerHTML = "";
-        paginator.innerHTML += `
-    <li class="page-item ${currentpage == 1 ? "disabled" : ""}">
-        <a class="page-link" href="#" data-page=${currentPage - 1}>«</a>
-    </li>
-    `
+    const renderAttendancePaginator = (totalPages, currentPage) => {
+    
+    paginator.innerHTML = "";
 
-        for (let i = 1; i <= totalpages; i++) {
-            paginator.innerHTML += `<li class="page-item ${currentPage === i ? "active" : ""}"} >
-        <a class="page-link" href="#" data-page=${i}>${i}</a>
-        </li>`
-        }
+    // Previous Button
+    paginator.innerHTML += `
+        <li class="page-item ${currentPage == 1 ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage - 1}">«</a>
+        </li>
+    `;
 
+    // First Page
+    if (currentPage > 3) {
         paginator.innerHTML += `
-    <li class="page-item ${currentpage == totalpages ? "disabled" : ""}">
-        <a class="page-link" href="#" data-page=${currentPage + 1}>»</a>
-    </li>`
+            <li class="page-item">
+                <a class="page-link" href="#" data-page="1">1</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        `;
     }
+
+    // Page Numbers (Current ± 2)
+    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+        paginator.innerHTML += `
+            <li class="page-item ${currentPage === i ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+            </li>
+        `;
+    }
+
+    // Last Page
+    if (currentPage < totalPages - 2) {
+        paginator.innerHTML += `
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item">
+                <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+            </li>
+        `;
+    }
+
+    // Next Button
+    paginator.innerHTML += `
+        <li class="page-item ${currentPage == totalPages ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage + 1}">»</a>
+        </li>
+    `;
+};
 
     recordsPerPageAttendance.addEventListener("change", (e) => {
         recordsPerPageforAttendance = e.target.value

@@ -1,5 +1,5 @@
 <?php
-$title = "Manager Dashboard";
+$title = "Create Department";
 require '../includes/sessions.php';
 include '../includes/head.php';
 
@@ -29,12 +29,12 @@ if (
             ?>
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
-                <h1 class="page-title">ALL EMPLOYEES PROFILE</h1>
+                <h1 class="page-title">CREATE NEW DEPARTMENT</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="allworkers.php"><i class="la la-home font-20"></i></a>
                     </li>
-                    <li class="breadcrumb-item">EMPLOYEES PROFILE</li>
+                    <li class="breadcrumb-item">ADD DEPARTMENT</li>
                 </ol>
             </div>
             <div class="page-content fade-in-up">
@@ -71,7 +71,7 @@ if (
                                 </div>
                                 
                             </div>
-                            <div class="row mt-3 ">
+                            <div class="row m-auto ">
                                     <button class="btn btn-primary m-3">Create Department</button>
                                 </div>
                                 <div class=" row flex-box">

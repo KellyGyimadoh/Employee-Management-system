@@ -107,7 +107,7 @@ if (!isloggedin() && !isset($_SESSION['accounttype']) && $_SESSION['accounttype'
                         </table>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 m-auto">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                             <ul class="attendancepagination pagination">
 

@@ -7,7 +7,7 @@ if (
     !isloggedin() || !isset($_SESSION['accounttype']) ||
     !in_array($_SESSION['accounttype'], ['admin']) || $_SESSION['userinfo']['status'] !== 1
 ) {
-    header("Location: ../error/error403.php");
+    header("Location: ../auth/index.php");
     session_destroy();
     die();
 }

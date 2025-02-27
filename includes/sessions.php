@@ -9,7 +9,7 @@ ini_set('session.use_strict_mode',1);
 $isSecure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
 
 session_set_cookie_params([
-'lifetime'=>1800,
+'lifetime'=>86400,
 'domain'=>'employee.test',
 'path'=>'/',
 'secure'=>false,
@@ -18,6 +18,12 @@ session_set_cookie_params([
 session_start();
 
 date_default_timezone_set('Africa/Accra');
+// if (isset($_SESSION['userid'])) {
+//     $interval = 60 * 30; // 30 min
+//     if (!isset($_SESSION['last_regeneration']) || (time() - $_SESSION['last_regeneration'] >= $interval)) {
+//         regenerate_session_id_loggedin();
+//     }
+// }
 if(isset($_SESSION['userid'])){
     if(!isset($_SESSION['last_regeneration'])){
         regenerate_session_id_loggedin();
