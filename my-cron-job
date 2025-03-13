@@ -1,0 +1,5 @@
+# Run attendance script every day at midnight
+0 0 * * * root /usr/bin/php /var/www/html/populate_attendance.php >> /var/www/html/attendance_log.txt 2>&1
+
+# Run payroll script at midnight on the 27th to 30th of every month
+0 0 27-30 * * root /usr/bin/php /var/www/html/populate_payroll.php >> /var/www/html/payroll_log.txt 2>&1
